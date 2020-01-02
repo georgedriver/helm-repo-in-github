@@ -4,7 +4,7 @@ dependencies:
   #   repository: https://kubernetes-charts.banzaicloud.com
   #   alias: thanos
   - name: thanos
-    version: 0.3.11
+    version: 0.3.12
     repository: file://../thanos
   - name: k8s-alert-router
     version: 0.1.8
