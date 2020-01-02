@@ -1,0 +1,71 @@
+{{- $root := . -}}
+
+{{- range .Values.cronjobs }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cron-{{ .name }}
+  labels:
+    app: {{ $root.Values.appName }}-cron
+    chart: k8s-generic-service
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+
+spec:
+  schedule: "{{ .schedule }}"
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default 3 }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default 3 }}
+  jobTemplate:
+    spec:
+      {{- if .activeDeadlineSeconds }}
+      activeDeadlineSeconds:
+{{ toYaml .activeDeadlineSeconds | indent 8 }}
+      {{- end }}
+      template:
+        metadata:
+          labels:
+            app: {{ $root.Values.appName }}-job
+          annotations:
+            {{- if $root.Values.vault.enabled }}
+            vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+            vault.security.banzaicloud.io/vault-skip-verify: "true"
+            {{- end }}
+            sidecar.istio.io/inject: "false" # Jobs cannot use istio proxy because it does not run to completion
+
+        spec:
+          imagePullSecrets:
+            - name: acrcred
+
+          volumes:
+            {{- range $root.Values.volumes }}
+            - name: {{ .name }}
+
+              {{- if .configMap }}
+              configMap:
+{{ toYaml .configMap | indent 16 }}
+              {{- end }}
+
+              {{- if .emptyDir }}
+              emptyDir:
+{{ toYaml .emptyDir | indent 16 }}
+              {{- end }}
+
+            {{- end }}
+          containers:
+            - name: {{ .name }}
+              image: "{{ .repository }}:{{ .tag }}"
+              command: {{ .command }}
+              imagePullPolicy: {{ $root.Values.image.pullPolicy }}
+              args: {{ .args }}
+              env:
+                - name: WE_ENV
+                  value: {{ $root.Values.geEnv }}
+                - name: DEPLOY_SHA
+                  value: {{ $root.Values.deploySHA }}
+              {{- range $root.Values.envVars }}
+                - name: "{{ .Name }}"
+                  value: "{{ .Value }}"
+              {{- end }}
+          restartPolicy: {{ .restartPolicy }}
+{{- end }}

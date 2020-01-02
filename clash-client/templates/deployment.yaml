@@ -1,0 +1,80 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "clash-client.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "clash-client.name" . }}
+    helm.sh/chart: {{ include "clash-client.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "clash-client.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "clash-client.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      initContainers:
+        - name: install
+          image: busybox
+          command:
+          - cp
+          - "/secret/config.yaml"
+          - "/root/.config/clash/config.yaml"
+          volumeMounts:
+          - name: workdir
+            mountPath: "/root/.config/clash"
+            readOnly: false
+          - name: secret-volume
+            mountPath: "/secret"
+      containers:
+        - name: {{ .Chart.Name }}
+          # command:
+          # - /clash
+          # - "-v"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: workdir
+            mountPath: "/root/.config/clash"
+            readOnly: false
+          ports:
+            - name: http
+              containerPort: 7890
+              protocol: TCP
+            - name: socks
+              containerPort: 7891
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: {{ include "clash-client.fullname" . }}-secret
+      - name: workdir
+        emptyDir: {}

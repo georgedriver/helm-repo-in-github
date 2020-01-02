@@ -1,0 +1,22 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.appName }}-monitoring
+  labels:
+    app: {{ .Values.appName }}
+    k8s-monitoring: "true"
+    team: {{ .Values.monitoring.team }}
+spec:
+  jobLabel: {{ .Values.appName }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: {{ .Values.monitoring.servicePortName }}
+    path: {{ .Values.monitoring.servicePath }}
+    interval: 30s
+{{- end }}

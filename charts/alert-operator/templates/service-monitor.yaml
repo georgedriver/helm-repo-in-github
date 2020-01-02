@@ -1,0 +1,24 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "alert-operator.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "alert-operator.name" . }}
+    helm.sh/chart: {{ include "alert-operator.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-monitoring: "true"
+spec:
+  jobLabel: {{ template "alert-operator.fullname" . }}
+  selector:
+    namespaceSelector:
+        matchNames:
+        - {{ .Release.Namespace }}
+    matchLabels:
+      app.kubernetes.io/name: {{ include "alert-operator.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  endpoints:
+  - port: tcp-metrics
+    interval: 15s
+{{- end }}

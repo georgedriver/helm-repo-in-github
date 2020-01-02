@@ -1,0 +1,32 @@
+{{- if .Values.grpcTranscoder.enabled }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+
+metadata:
+  name: {{ .Values.appName }}-grpc-transcoder
+  namespace: {{ .Values.namespace }}
+spec:
+  workloadLabels:
+    app: {{ .Values.appName }}
+
+  filters:
+  - listenerMatch:
+      portNumber: {{ .Values.grpcTranscoder.port }}
+      listenerType: SIDECAR_INBOUND
+    insertPosition:
+      index: BEFORE
+      relativeTo: envoy.router
+    filterName: envoy.grpc_json_transcoder
+    filterType: HTTP
+    filterConfig:
+      services:
+        {{- range .Values.grpcTranscoder.protoServices }}
+        - {{ . }}
+        {{- end }}
+      protoDescriptorBin: {{ .Values.grpcTranscoder.protoDescriptorB64String }}
+      printOptions:
+        addWhiteSpace: {{ .Values.grpcTranscoder.printOptions.addWhiteSpace }}
+        alwaysPrintPrimitiveFields: {{ .Values.grpcTranscoder.printOptions.alwaysPrintPrimitiveFields }}
+        alwaysPrintEnumsAsInts: {{ .Values.grpcTranscoder.printOptions.alwaysPrintEnumsAsInts }}
+        preserveProtoFieldNames: {{ .Values.grpcTranscoder.printOptions.preserveProtoFieldNames }}
+{{- end }}

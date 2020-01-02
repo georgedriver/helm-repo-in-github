@@ -1,0 +1,14 @@
+target_configuration:
+  name: alertmanager
+  namespace: system-monitoring
+
+slack:
+  name: "null"
+  channel: ""
+  webhook_url: ""
+
+pagerduty:
+  name: ""
+  service_key: ""
+
+enable_default_router: true 

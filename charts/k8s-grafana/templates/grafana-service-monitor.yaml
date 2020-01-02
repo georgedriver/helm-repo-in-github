@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: {{ template "k8s-grafana.name" . }}
+    chart: {{ template "k8s-grafana.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+    k8s-monitoring: "true"
+  name: {{ template "k8s-grafana.fullname" . }}-grafana
+spec:
+  jobLabel: k8s-grafana
+  selector:
+    matchLabels:
+      app: grafana
+  endpoints:
+  - port: service
+    interval: 30s

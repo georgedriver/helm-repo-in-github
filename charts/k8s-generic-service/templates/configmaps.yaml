@@ -1,0 +1,20 @@
+{{- if .Values.configMaps }}
+{{- $root := . -}}
+{{- range .Values.configMaps }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ $root.Values.appName }}
+    {{- range $k, $v := .labels }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+data:
+{{- range $k, $v := .data }}
+  {{ $k}}: |-
+{{ $v | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}

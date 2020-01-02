@@ -1,0 +1,6 @@
+# Default values for vault-agent.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+image: "georgedriver/alertmanager-dingtalk-hook:latest"
+imagePullSecrets: ""
+robot_token:

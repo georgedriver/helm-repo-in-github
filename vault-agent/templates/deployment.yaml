@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-agent
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: vault-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-agent
+  template:
+    metadata:
+      labels:
+        app: vault-agent
+    spec:
+      serviceAccount: vault-agent-k8s-sa
+      serviceAccountName: vault-agent-k8s-sa
+      {{- if .Values.imagePullSecrets }} 
+      imagePullSecrets:
+      - name: "{{ .Values.imagePullSecrets }}"
+      {{- end }}
+      containers:
+      - name: vault-agent
+        image: "{{ .Values.image }}"
+        env:
+        - name: PROJECT
+          value: "{{ .Values.project }}"
+        - name: K8S_SKIP_TLS_VERIFY
+          value: "true"
+        - name: VAULT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: vault-agent.service-secrets
+              key: vault-token
+        - name: VAULT_ADDR
+          value: "{{ .Values.vault_addr }}"
+        - name: SECRET_REFRESH_TIME
+          value: "{{ .Values.secret_refresh_time }}"
+

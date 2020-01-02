@@ -1,0 +1,61 @@
+{{- define "k8s-generic-service.Helper.AppContainer" }}
+- name: {{ .Values.appName }}
+  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  volumeMounts:
+    {{- range .Values.volumes }}
+    - name: {{ .name }}
+      mountPath: {{ .mountPath }}
+      {{- if .readOnly }}
+      readOnly: {{ .readOnly }}
+      {{-  end }}
+      {{- if .subPath }}
+      subPath: {{ .subPath }}
+      {{-  end }}
+    {{- end }}
+  command:
+{{ toYaml .Values.command | indent 4 }}
+  args:
+{{ toYaml .Values.args | indent 4 }}
+  env:
+    - name: WE_ENV
+      value: {{ .Values.geEnv }}
+    - name: DEPLOY_SHA
+      value: {{ .Values.deploySHA }}
+  {{- range .Values.envVars }}
+    - name: "{{ .Name }}"
+      value: "{{ .Value }}"
+  {{- end }}
+
+  {{- range .Values.configMapEnvVars }}
+    - name: "{{ .Name }}"
+      valueFrom:
+          configMapKeyRef:
+            name: {{ .configMapName }}
+            key: {{  .configMapKey }}
+  {{- end }}
+
+  ports:
+    {{- range .Values.service.ports }}
+    - name: {{ .name }}
+      containerPort: {{ .containerPort }}
+      protocol: {{ .protocol }}
+    {{- end }}
+
+  {{- if (.Values.healthProbe.http.enabled) and (not .Values.healthProbe.tcp.enabled) and (not .Values.healthProbe.exec.enabled) }}
+    {{ include "k8s-generic-service.Helper.HTTPLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
+  {{- end}}
+
+
+  {{- if (.Values.healthProbe.tcp.enabled) and (not .Values.healthProbe.http.enabled) and (not .Values.healthProbe.exec.enabled) }}
+    {{ include "k8s-generic-service.Helper.TCPLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
+  {{- end }}
+
+  {{- if (.Values.healthProbe.exec.enabled) and (not .Values.healthProbe.http.enabled) and (not .Values.healthProbe.tcp.enabled) }}
+    {{ include "k8s-generic-service.Helper.ExecLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
+  {{- end }}
+
+  resources:
+{{ toYaml .Values.resources | indent 4 }}
+
+{{- end }}

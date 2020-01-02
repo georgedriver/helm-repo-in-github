@@ -1,0 +1,276 @@
+{{- if .Values.monitoring.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "k8s-thanos.name" . }}
+  labels:
+    k8s-monitoring: "true"
+    app: {{ template "k8s-thanos.name" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    chart: {{ template "k8s-thanos.chart" . }}
+{{- with .Values.annotations }}
+  annotations:
+    {{ toYaml . }}
+{{- end }}
+spec:
+  groups:
+    # from https://github.com/thanos-io/thanos/blob/master/examples/alerts/alerts.md
+    - name: thanos-compactor-alerts
+      rules:
+
+        ## Thanos Compact Halted
+        # https://github.com/thanos-io/thanos/blob/9c2fe0392a40cce0012f64ce297dfa1c51926f62/cmd/thanos/compact.go#L165
+        # This symptom indicates that the compactor is failing to run
+        #
+        # Possible causes include:
+        #  - Compactor is down
+        #  - Compactor is having trouble connecting to s3
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosCompactHalted
+          expr: thanos_compactor_halted{job="{{ .Release.Name }}-compact"} == 1
+          for: 5m
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos compaction has failed to run and now is halted
+            impact: Long term storage queries will be slower
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos compaction has failed to run and now is halted. Long term storage queries will be slower. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: COMPACTION_URL
+
+        ## Thanos Compact Compaction Failed
+        # https://github.com/thanos-io/thanos/blob/9299aa65acd5f16fca07543ded5c383e32605f4a/pkg/compact/downsample/downsample.go#L38
+        # This symptom indicates that the compactor is unable to properly perform prometheus tsdb compactions (downsampling)
+        #
+        # Possible causes include:
+        #  - Compactor is having trouble connecting to s3
+        #
+        # This error does NOT indicate:
+        #  - That malformed data blocks are being sent to s3 from the compactor
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosCompactCompactionsFailed
+          expr: rate(prometheus_tsdb_compactions_failed_total{job="{{ .Release.Name }}-compact"}[5m]) > 0
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Compact is failing compaction
+            impact: Long term storage queries will be slower
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Compact is failing compaction. Long term storage queries will be slower. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: COMPACTION_URL
+
+        ## Thanos Compact Bucket Operations Failed
+        # https://github.com/thanos-io/thanos/blob/64af185e73978986c7955d2b3e8ad49e33bb099c/pkg/objstore/objstore.go#L197
+        # This symptom indicates that the compactor is having trouble connecting to s3
+        #
+        # Possible causes include:
+        #  - Compactor is having trouble connecting to s3
+        #
+        # This error does NOT indicate:
+        #  - That malformed data blocks are being sent to s3 from the compactor
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosCompactBucketOperationsFailed
+          expr: rate(thanos_objstore_bucket_operation_failures_total{job="{{ .Release.Name }}-compact"}[5m]) > 0
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Compact bucket operations are failing
+            impact: Long term storage queries will be slower
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Compact bucket operations are failing. Long term storage queries will be slower. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: COMPACTION_URL
+
+        ## Thanos Compact Not Run in 24 Hours
+        # https://github.com/thanos-io/thanos/blob/64af185e73978986c7955d2b3e8ad49e33bb099c/pkg/objstore/objstore.go#L210
+        # This symptom indicates that the compactor is not running downsampling
+        # thanos_objstore_bucket_last_successful_upload_time is set each time we successfully upload to s3
+        #
+        # Possible causes include:
+        #  - Compactor is having trouble connecting to s3
+        #  - Compactor is not running compaction
+        #
+        # This error does NOT indicate:
+        #  - That malformed data blocks are being sent to s3 from the compactor
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosCompactNotRunIn24Hours
+          expr: (time() - max(thanos_objstore_bucket_last_successful_upload_time{job="{{ .Release.Name }}-compact"}) ) /60/60 > 24
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Compaction has not been run in 24 hours
+            impact: Long term storage queries will be slower
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Compaction has not been run in 24 hours. Long term storage queries will be slower. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: COMPACTION_URL
+
+        ## Thanos Compaction Not Running
+        # This symptom indicates that the compactor is down but we are still scraping metrics, OR that it is absent entirely
+        #
+        # Possible causes include:
+        #  - Thanos Compactor is down
+        #  - Thanos service monitor is malfunctioning
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosComactionIsNotRunning
+          expr: up{job="{{ .Release.Name }}-compact"} == 0 or absent({job="{{ .Release.Name }}-compact"})
+          for: 5m
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Compaction is not running
+            impact: Long term storage queries will be slower
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Compaction is not running. Long term storage queries will be slower. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: COMPACTION_URL
+
+        ## Thanos Compaction Multiple Compactions Running
+        # This symptom indicates that more than one compactor is active! This is VERY BAD.
+        #
+        # Possible causes include:
+        #  - Someone manually installed an extra compactor for some reason
+        #  - This should not happen you really don't want to be here
+        #  - How did you get here oh no
+        #  - just take them both down and let the deployment sort it out
+        #
+        # This error COULD indicate:
+        #  - That malformed data blocks are being sent to s3 from the compactor
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosComactionMultipleCompactionsAreRunning
+          expr: sum(up{job="{{ .Release.Name }}-compact"}) > 1
+          for: 5m
+          labels:
+            severity: critical
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Multiple replicas of Thanos compaction shouldn't be running.
+            impact: Metrics in long term storage may be corrupted
+            action: Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace. Take the compactors down and let the deployment fix it.
+            description: Multiple replicas of Thanos compaction shouldn't be running! Metrics in long term storage may be corrupted. Check thanos-compactor pod logs in {{ .Release.Namespace }} namespace. Take the compactors down and let the deployment fix it.
+            # dashboard: COMPACTION_URL
+    - name: thanos-store-gateway-alerts
+      rules:
+
+        ## Thanos Store GRPC Erorr Rate
+        # This symptom indicates that the thanos store is unable to handle all requests coming in to it
+        #
+        # Possible causes include:
+        #  - Thanos Store is handling too much at once
+        #  - Thanos Store is down
+        #
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosStoreGrpcErrorRate
+          expr: rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable",job="{{ .Release.Name }}-store-http"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Store is returning Internal/Unavailable errors
+            impact: Long Term Storage Prometheus queries are failing
+            action: Check thanos-store pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Store is returning Internal/Unavailable errors. Long Term Storage Prometheus queries are failing. Check thanos-store pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: GATEWAY_URL
+
+        ## TEMPORARILY DISABLED
+        # https://github.com/thanos-io/thanos/issues/784
+        # This alert is way too sensitive by default
+        # and can often be triggered by unrelated issues.
+        #######
+        # - alert: ThanosStoreBucketOperationsFailed
+        #   expr: rate(thanos_objstore_bucket_operation_failures_total{job="{{ .Release.Name }}-store-http"}[5m]) > 0
+        #   for: 5m
+        #   labels:
+        #     severity: warning
+        #     namespace: {{ .Release.Namespace }}
+        #     alert_source: {{ .Release.Name }}
+        #   annotations:
+        #     summary: Thanos Store is failing to do bucket operations
+        #     impact: Long Term Storage Prometheus queries are failing
+        #     action: Check thanos-store pod logs in {{ .Release.Namespace }} namespace
+        #     dashboard: GATEWAY_URL
+
+
+    # We need to set these up later
+    # - name: thanos-sidecar-alerts
+    #   rules:
+    #     - alert: ThanosSidecarPrometheusDown
+    #       expr: thanos_sidecar_prometheus_up{name="prometheus"} == 0
+    #       for: 5m
+    #       labels:
+    #         severity: warning
+    #         namespace: {{ .Release.Namespace }}
+    #         alert_source: {{ .Release.Name }}
+    #       annotations:
+    #         summary: Thanos Sidecar cannot connect to Prometheus
+    #         impact: Prometheus configuration is not being refreshed
+    #         action: Check thanos-sidecar pod logs in {{ .Release.Namespace }} namespace
+    #         # dashboard: SIDECAR_URL
+    #     - alert: ThanosSidecarBucketOperationsFailed
+    #       expr: rate(thanos_objstore_bucket_operation_failures_total{name="prometheus"}[5m]) > 0
+    #       for: 5m
+    #       labels:
+    #         severity: warning
+    #         namespace: {{ .Release.Namespace }}
+    #         alert_source: {{ .Release.Name }}
+    #       annotations:
+    #         summary: Thanos Sidecar bucket operations are failing
+    #         impact: We will lose metrics data if not fixed in 24h
+    #         action: Check thanos-sidecar pod logs in {{ .Release.Namespace }} namespace
+    #         # dashboard: SIDECAR_URL
+    #     - alert: ThanosSidecarGrpcErrorRate
+    #       expr: rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable",name="prometheus"}[5m]) > 0
+    #       for: 5m
+    #       labels:
+    #         severity: warning
+    #         namespace: {{ .Release.Namespace }}
+    #         alert_source: {{ .Release.Name }}
+    #       annotations:
+    #         summary: Thanos Sidecar is returning Internal/Unavailable errors
+    #         impact: Prometheus queries are failing
+    #         action: Check thanos-sidecar pod logs in {{ .Release.Namespace }} namespace
+    #         # dashboard: SIDECAR_URL
+    - name: thanos-query-alerts
+      rules:
+
+        ## Thanos Query GRPC Erorr Rate
+        # This symptom indicates that the thanos query is unable to handle all requests coming in to it
+        #
+        # Possible causes include:
+        #  - Thanos Query is handling too much at once
+        #  - Thanos Query is down
+        #
+        #
+        # Specific details of the error will be outputted to the compactor logs
+        - alert: ThanosQueryGrpcErrorRate
+          expr: rate(grpc_server_handled_total{grpc_code=~"Unknown|ResourceExhausted|Internal|Unavailable",job="{{ .Release.Name }}-query-http"}[5m]) > 0
+          for: 10m
+          labels:
+            severity: critical
+            namespace: {{ .Release.Namespace }}
+            alert_source: {{ .Release.Name }}
+          annotations:
+            summary: Thanos Query is returning Internal/Unavailable errors
+            impact: Grafana is not showing metrics
+            action: Check thanos-query pod logs in {{ .Release.Namespace }} namespace
+            description: Thanos Query is returning Internal/Unavailable errors. Grafana is not showing metrics. Check thanos-query pod logs in {{ .Release.Namespace }} namespace.
+            # dashboard: QUERY_URL
+{{- end }}

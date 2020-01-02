@@ -1,0 +1,47 @@
+{{- if .Values.thanos.query.grpc.ingress.externalEnabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: {{ template "k8s-thanos.name" . }}
+    chart: {{ template "k8s-thanos.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/proxy-http-version: "2.0"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      listen 8443 ssl http2;
+      http2_max_requests 100000;
+    nginx.ingress.kubernetes.io/auth-type: "basic"
+    nginx.ingress.kubernetes.io/auth-secret: k8s-thanos-query-grpc
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - thanos'
+    {{- range $k, $v := .Values.thanos.query.grpc.ingress.annotations }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+  name: {{ template "k8s-thanos.fullname" . }}-grpc-external
+spec:
+  {{- if .Values.thanos.query.grpc.ingress.tls }}
+  tls:
+    {{- range .Values.thanos.query.grpc.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . | quote }}
+      {{- end }}
+      {{- if .secretName }}
+      secretName: {{ .secretName }}
+      {{- end}}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.thanos.query.grpc.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+          - path: {{ $.Values.thanos.query.grpc.ingress.path }}
+            backend:
+              serviceName: k8s-thanos-query-grpc-external
+              servicePort: 10901
+  {{- end }}
+{{- end }}

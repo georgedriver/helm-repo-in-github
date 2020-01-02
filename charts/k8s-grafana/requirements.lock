@@ -1,0 +1,9 @@
+dependencies:
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 3.0.1
+- name: k8s-alert-router
+  repository: https://raw.githubusercontent.com/georgedriver/helm-repo-in-github/master
+  version: 0.1.8
+digest: sha256:c3ea96a8e3c4cbefba9d767e89c82498fa3164cfbbde83f5755191c410e584b9
+generated: "2020-01-02T11:37:29.231971+08:00"

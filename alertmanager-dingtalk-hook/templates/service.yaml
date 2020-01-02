@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dingtalk-hook
+spec:
+  selector:
+    app: dingtalk-hook
+  ports:
+  - name: hook
+    port: 5000
+    targetPort: http

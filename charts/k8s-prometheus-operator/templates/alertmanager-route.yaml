@@ -1,0 +1,36 @@
+{{ $alertValues := index .Values "k8s-alert-router" }}
+
+apiVersion: monitoring.alerts.com/v1alpha1
+kind: AlertManagerRoute
+metadata:
+  name: {{ template "k8s-prometheus-operator.fullname" . }}
+  labels:
+    app: {{ template "k8s-prometheus-operator.name" . }}
+    chart: {{ template "k8s-prometheus-operator.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+spec:
+  target_configuration:
+    secret_name: {{ $alertValues.alerts.selectors.secretName }}
+    # target the namespace of where the alert manager is running
+    namespace: {{ $alertValues.alerts.selectors.alertManagerNamespace }}
+  routes:
+      # receiver name
+    - receiver: 'null'
+      match_re:
+        severity: .*
+        alertname: (^CPUThrottlingHigh)
+    - receiver:  {{ $alertValues.alerts.receivers.warningReceiverName }}
+      # Match labels & value
+      match_re:
+        severity: .*
+        alertname: (^API.*|^K8.*|^KubeAPI*|^KubeStateMetricsDown|^NodeExporterDown|^PrometheusDown|^PrometheusOperatorDown|^Kube.*Overcommit|^KubePersistentVolumeErrors|^KubeNodeNotReady|^KubeVersionMismatch|^Kubelet.*|)
+      continue: true
+      routes:
+        # db_multi_alert sends alert to pagerduty and slack
+        - receiver: {{ $alertValues.alerts.receivers.criticalReceiverName }}
+          # Match labels & value
+          match:
+            severity: critical
+          match_re:
+            alertname: (^API.*|^K8.*|^KubeAPI*|^KubeStateMetricsDown|^NodeExporterDown|^PrometheusDown|^PrometheusOperatorDown|^Kube.*Overcommit|^KubePersistentVolumeErrors|^KubeNodeNotReady|^KubeVersionMismatch|^Kubelet.*|)

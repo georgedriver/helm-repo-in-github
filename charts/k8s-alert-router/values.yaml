@@ -1,0 +1,13 @@
+# Default values for alert-router.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+alerts:
+  selectors:
+    secretName: ""
+    alertManagerNamespace: ""
+  receivers:
+    warningReceiverName: ""
+    criticalReceiverName: ""

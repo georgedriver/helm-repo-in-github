@@ -1,0 +1,20 @@
+{{- if .Values.monitoring.enabled }}
+{{- if .Values.dashboards }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-{{ .Values.appName }}
+  labels:
+    grafana-dashboard: "True"
+    app.kubernetes.io/name: {{ .Values.appName }}
+    helm.sh/chart: k8s-generic-service
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+data:
+{{- range $key, $val := .Values.dashboards }}
+  {{ $key }}.json: |
+{{ $val | indent 4 }}
+
+{{- end }}
+{{- end }}
+{{- end }}

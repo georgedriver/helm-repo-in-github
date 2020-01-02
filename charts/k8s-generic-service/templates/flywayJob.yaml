@@ -1,0 +1,54 @@
+{{- if .Values.flywayJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.flywayJob.name }}
+  annotations:
+    # https://github.com/helm/helm/blob/master/docs/charts_hooks.md
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}-flyway
+      annotations:
+        {{- if .Values.vault.enabled }}
+        vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+        vault.security.banzaicloud.io/vault-skip-verify: "true"
+        {{- end }}
+        sidecar.istio.io/inject: "false"
+    spec:
+      imagePullSecrets:
+        - name: acrcred
+      restartPolicy: Never
+      volumes:
+        - name: flyway-sql
+          emptyDir: {}
+      initContainers:
+        - name: db-migration-sql
+          image: "{{ .Values.flywayJob.sqlImage.repository }}:{{ .Values.flywayJob.sqlImage.tag }}"
+          imagePullPolicy: {{ .Values.flywayJob.sqlImage.pullPolicy }}
+          volumeMounts:
+            - name: flyway-sql
+              mountPath: /mountsql
+          command: ["cp", "-Rv", "/flyway/sql", "/mountsql"]
+      containers:
+        - name: db-migration-flyway
+          image: "{{ .Values.flywayJob.flywayImage.repository }}:{{ .Values.flywayJob.flywayImage.tag }}"
+          command:
+            - flyway
+          args:
+            - "-url=jdbc:{{ .Values.flywayJob.databaseType | default "mysql" }}://$DB_ADDRESS/$DB_NAME"
+            - "migrate"
+          env:
+          {{- range .Values.envVars }}
+            - name: "{{ .Name }}"
+              value: "{{ .Value }}"
+          {{- end }}
+          volumeMounts:
+            - name: flyway-sql
+              mountPath: /flyway/sql
+              readOnly: true
+{{- end }}

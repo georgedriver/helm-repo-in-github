@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "clash-client.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "clash-client.name" . }}
+    helm.sh/chart: {{ include "clash-client.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 7890
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: 7891
+      targetPort: socks
+      protocol: TCP
+      name: socks
+  selector:
+    app.kubernetes.io/name: {{ include "clash-client.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

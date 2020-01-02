@@ -1,0 +1,2 @@
+The alertmanager-dingtalk-hook has been installed.
+The webhook_configs URL is: http://dingtalk-hook.{{ .Release.Namespace }}.svc.cluster.local:5000'

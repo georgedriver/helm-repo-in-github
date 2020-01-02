@@ -1,0 +1,63 @@
+{{ $root := . -}}
+{{ $promOper := index .Values "prometheus-operator" }}
+{{- if .Values.prometheus_cluster.enabled }}
+{{- range $i, $e := until ($root.Values.prometheus_cluster.workers|int) }}
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    app: {{ template "k8s-prometheus-operator.name" $root }}
+    chart: {{ template "k8s-prometheus-operator.chart" $root }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    {{- range $k, $v := $promOper.commonLabels }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+  name: prometheus-hashmod-cluster-{{ $i }}
+spec:
+  additionalScrapeConfigs:
+    key: cluster-scrape-config.yaml
+    name: cluster-scrape-config-{{ $i }}
+  baseImage: quay.io/prometheus/prometheus
+  externalLabels:
+    prometheusWorker: "{{ $i }}"
+    {{- if $promOper.prometheus.prometheusSpec.externalLabels -}}
+    {{ include "toYaml" $promOper.prometheus.prometheusSpec.externalLabels | nindent 4 }}
+    {{- end -}}
+  externalUrl: {{ $promOper.prometheus.prometheusSpec.externalUrl }}
+  listenLocal: false
+  logLevel: info
+  paused: false
+  {{- if $promOper.prometheus.prometheusSpec.podMetadata }}
+  podMetadata:
+    {{ include "toYaml" $promOper.prometheus.prometheusSpec.podMetadata | nindent 4 }}
+  {{- end }}
+  replicas: 1
+  {{- if $promOper.prometheus.prometheusSpec.resources }}
+  resources:
+    {{ include "toYaml" $promOper.prometheus.prometheusSpec.resources | nindent 4 }}
+  {{- end }}
+  retention: {{ $promOper.prometheus.prometheusSpec.retention }}
+  routePrefix: /
+  serviceMonitorNamespaceSelector:
+    any: true
+  serviceMonitorSelector:
+    matchLabels:
+      hasmmodService: "true"
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: {{ $.Release.Name }}-prometheus
+  {{- if $promOper.prometheus.prometheusSpec.storageSpec }}
+  storage:
+    {{ include "toYaml" $promOper.prometheus.prometheusSpec.storageSpec | nindent 4 }}
+  {{- end }}
+  {{- if $promOper.prometheus.prometheusSpec.thanos }}
+  thanos:
+    {{ include "toYaml" $promOper.prometheus.prometheusSpec.thanos | nindent 4 }}
+  {{- end }}
+  version: {{ default "v2.11.1" $promOper.prometheus.prometheusSpec.version }}
+---
+{{- end }}
+{{- end }}

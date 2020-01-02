@@ -1,0 +1,17 @@
+{{- if .Values.thanos.compact.dataVolume.backend.persistentVolumeClaim }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: {{ template "k8s-thanos.name" . }}
+    heritage: {{ $.Release.Service }}
+    app: k8s-thanos-compact
+  name: {{ .Values.thanos.compact.dataVolume.backend.persistentVolumeClaim.claimName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.thanos.compact.dataVolume.size }}
+  storageClassName: {{ .Values.thanos.compact.dataVolume.backend.persistentVolumeClaim.storageClassName }}
+{{- end }}

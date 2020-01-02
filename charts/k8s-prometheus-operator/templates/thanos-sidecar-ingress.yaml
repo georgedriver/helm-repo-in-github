@@ -1,0 +1,33 @@
+{{ $promOper := index .Values "prometheus-operator" }}
+{{- if and $promOper.prometheus.prometheusSpec.thanos .Values.thanos_ingress.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: {{ template "k8s-prometheus-operator.name" . }}
+    chart: {{ template "k8s-prometheus-operator.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+  {{- if .Values.thanos_ingress.annotations }}
+  annotations:
+    {{- range $k, $v := .Values.thanos_ingress.annotations }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+  {{- end }}
+  name: {{ template "k8s-prometheus-operator.fullname" . }}-thanos-sc
+spec:
+  rules:
+  - host: {{ .Values.thanos_ingress.hostname }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ template "k8s-prometheus-operator.fullname" . }}-thanos-sc
+          servicePort: grpc
+        path: /
+  {{- if .Values.thanos_ingress.tls.secretName }}
+  tls:
+  - hosts:
+    - {{ default .Values.thanos_ingress.tls.hostname .Values.thanos_ingress.hostname }}
+    secretName: {{ .Values.thanos_ingress.tls.secretName }}
+  {{- end }}
+{{- end }}

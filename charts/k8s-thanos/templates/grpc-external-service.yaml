@@ -1,0 +1,22 @@
+{{- if .Values.thanos.query.grpc.ingress.externalEnabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-thanos-query-grpc-external
+  labels:
+    app: {{ template "k8s-thanos.name" . }}
+    chart: {{ template "k8s-thanos.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+spec:
+  ports:
+  - name: grpc
+    port: 10901
+    protocol: TCP
+    targetPort: grpc
+  selector:
+    app.kubernetes.io/component: query
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/name: thanos
+  type: ClusterIP
+{{- end }}

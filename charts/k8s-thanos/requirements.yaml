@@ -1,0 +1,12 @@
+dependencies:
+  # - name: thanos
+  #   version: 0.3.11
+  #   repository: https://kubernetes-charts.banzaicloud.com
+  #   alias: thanos
+  - name: thanos
+    version: 0.3.11
+    repository: file://../thanos
+  - name: k8s-alert-router
+    version: 0.1.8
+    repository: https://raw.githubusercontent.com/georgedriver/helm-repo-in-github/master
+    condition: monitoring.alerting.enabled

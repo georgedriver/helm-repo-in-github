@@ -1,0 +1,7 @@
+# Default values for vault-agent.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+project: ""
+vault_addr: ""
+secret_refresh_time: 30
+vault_token: ""

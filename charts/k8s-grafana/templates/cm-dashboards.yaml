@@ -1,0 +1,19 @@
+{{ $app_name := include "k8s-grafana.name" . }}
+{{ $chart_name := include "k8s-grafana.chart" . }}
+{{ $label_key := .Values.grafana.sidecar.dashboards.label }}
+{{ $root := . }}
+{{ range $path, $bytes := .Files.Glob "k8s-dashboards/*.json" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ base ( trimSuffix ".json" $path) }}
+  labels:
+    {{ $label_key }}: "True"
+    app: {{ $app_name }}
+    chart: {{ $chart_name }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+data:
+{{ ($root.Files.Glob $path).AsConfig | indent 2 }}
+---
+{{ end }}

@@ -1,0 +1,39 @@
+{{- if .Values.enable_default_router }}
+apiVersion: monitoring.alerts.com/v1alpha1
+kind: AlertManagerRoute
+metadata:
+  name: {{ template "k8s-alert-receiver.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "k8s-alert-receiver.name" . }}
+    helm.sh/chart: {{ include "k8s-alert-receiver.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-monitoring: "true"
+spec:
+  target_configuration:
+    secret_name: {{ required "Please specify the alertmanager secret name for selectors" .Values.target_configuration.name }}
+    # target the namespace of where the alert manager is running
+    namespace: {{ required "Please specify the alertmanager namespace for selectors" .Values.target_configuration.namespace }}
+  routes:
+      # receiver name
+    {{- if (.Values.slack.webhook_url) and (.Values.slack.name) }}
+    - receiver: {{ .Values.slack.name }}
+    {{- else }}
+    - receiver: 'null'
+    {{- end }}
+      # Match labels & value
+      match:
+        namespace: {{ .Release.Namespace }}
+      match_re:
+        severity: .*
+      {{- if (.Values.pagerduty.service_key) and (.Values.pagerduty.name) }}
+      continue: true
+      routes:
+        # db_multi_alert sends alert to pagerduty and slack
+        - receiver: {{ .Values.pagerduty.name }}
+          # Match labels & value
+          match:
+            severity: critical
+            namespace: {{ .Release.Namespace }}
+      {{- end }}
+{{- end }}

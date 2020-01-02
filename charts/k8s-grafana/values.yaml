@@ -1,0 +1,82 @@
+# k8s oauth settings
+auth:
+  root_url: ""
+  github:
+    enabled: false
+    client_id: ''
+    client_secret: ''
+    organizations: goatapp
+    teamsID: ''
+  okta:
+    enabled: false
+    client_id: ''
+    client_secret: ''
+    name: Okta
+    scopes: "openid profile email"
+    api_url: "https://gg.okta.com/oauth2/v1/userinfo"
+    auth_url: "https://gg.okta.com/oauth2/v1/authorize"
+    token_url: "https://gg.okta.com/oauth2/v1/token"
+
+# Enable HPA (HorizontalPodAutoscaler) to have your application auto-scale based on CPU usage, memory usage or both
+# for HPA to work, you must set resources.requests.cpu / resources.requests.cpu (or both).
+hpa:
+  enabled: true
+  replicas:
+    # Set the number of minimum replicas for your service
+    min: 1
+    # Set the number of maximum replicas for your service
+    max: 5
+  # Set AVG CPU utilization value (use integer as percentge e.g 75 for 75%).
+  # If CPU usage is higher than this number HPA will scale out your pods up
+  # until this value is achived on all pods, or to the maximum.
+  # It will scale in when the usage drops, until it reaches minimum
+  cpuUtilization: 85
+  # Set target memory usage value.
+  # If Memory usage reaches that value your pod will scale up,
+  # until this value achived on all pods (or up to the maximum).
+  # It will scale in when the usage drops, until it reaches minimum
+  memoryUtilization: ''
+
+#Setting for prometheus data source
+datasource:
+  hostname: "k8s-prometheus"
+  port: "9090"
+# Variable passed to the stable/grafana chart
+grafana:
+  nameOverride: grafana
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    hosts:
+      - "grafana"
+  envFromSecret: grafana-sso-auth
+  env:
+    GF_USERS_VIEWERS_CAN_EDIT: true
+  sidecar:
+    dashboards:
+      label: grafana-dashboard
+      enabled: true
+    datasources:
+      label: grafana-datasource
+      enabled: true
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+
+monitoring:
+  alerting:
+    enabled: true
+k8s-alert-router:
+  alerts:
+    selectors:
+      secretName: ""
+      alertManagerNamespace: ""
+  receivers:
+    warningReceiverName: ""
+    # Leave empty to disable pagerduty/critical alerts
+    criticalReceiverName: ""

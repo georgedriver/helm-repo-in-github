@@ -1,0 +1,26 @@
+{{- if .Values.monitoring.alerting.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "k8s-grafana.name" . }}
+    helm.sh/chart: {{ include "k8s-grafana.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-monitoring: "true"
+  name: {{ template "k8s-grafana.fullname" . }}
+spec:
+  groups:
+  - name: grafana.rules
+    rules:
+    - alert: GrafanaReplicaUnAva
+      annotations:
+        description: grafana's deployment {{ "{{ $value }}" }} total replicas are unavailable for the last 5 min
+        summary: grafana's replicas unavailable
+      expr: kube_deployment_status_replicas_unavailable{deployment="{{ .Release.Name }}"} > 0
+      for: 5m
+      labels:
+        severity: critical
+        alert_source: {{ .Release.Name }}
+        namespace: {{ .Release.Namespace }}
+{{- end }}

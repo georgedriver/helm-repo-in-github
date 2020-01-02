@@ -1,0 +1,158 @@
+# NEW Operator Params:
+grafana:
+  enabled: false
+# fullNameOverride: k8s
+datasource:
+  auto_load_label: grafana-datasource
+  isDefault: true
+prometheus-operator:
+
+  commonLabels:
+    k8s-monitoring: "true"
+  defaultRules:
+    labels: &scrapeLabels
+      k8s-monitoring: "true"
+    rules:
+      kubeScheduler: false
+
+  prometheusOperator:
+    createCustomResource: false
+    configReloaderCpu: 5m
+    configReloaderMemory: 25Mi
+
+  prometheus:
+    enabled: true
+    ingress:
+      enabled: true
+      annotations:
+        # Setting DNS name
+        kubernetes.io/ingress.class: nginx-external
+      hosts:
+        - prometheus
+    prometheusSpec:
+      # serviceMonitorSelectorNilUsesHelmValues: false
+      thanos:
+        baseImage: improbable/thanos
+        version: v0.2.1
+        peers: k8s-thanos.system-monitoring.svc.cluster.local:10900
+        objectStorageConfig:
+          key: secret-file
+          name: secret-name
+      serviceMonitorSelector:
+        matchLabels:
+          *scrapeLabels
+      ruleSelector:
+        matchLabels:
+          *scrapeLabels
+      ruleNamespaceSelector:
+        any: true
+      serviceMonitorNamespaceSelector:
+        any: true
+      externalUrl: ""
+      storageSpec: {}
+      additionalAlertManagerConfigs:
+      - kubernetes_sd_configs:
+        - api_server: null
+          role: service
+        scheme: http
+        path_prefix: /
+        timeout: 10s
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_service_label_k8s_alertmanager]
+          separator: ;
+          regex: True
+          replacement: $1
+          action: keep
+        - source_labels: [__meta_kubernetes_endpoint_port_name]
+          separator: ;
+          regex: http
+          replacement: $1
+          action: keep
+      additionalScrapeConfigs:
+      - job_name: tiller
+        scrape_interval: 1m
+        scrape_timeout: 10s
+        metrics_path: /metrics
+        scheme: http
+        kubernetes_sd_configs:
+        - api_server: null
+          role: pod
+          namespaces:
+            names: []
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: "tiller-deploy.*"
+          replacement: $1
+          action: keep
+        - source_labels: [__meta_kubernetes_pod_container_port_name]
+          separator: ;
+          regex: "http"
+          replacement: $1
+          action: keep
+        - separator: ;
+          regex: __meta_kubernetes_pod_label_(.+)
+          replacement: $1
+          action: labelmap
+        - source_labels: [__meta_kubernetes_namespace]
+          separator: ;
+          regex: (.*)
+          target_label: kubernetes_namespace
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: (.*)
+          target_label: kubernetes_pod_name
+          replacement: $1
+          action: replace
+
+  alertmanager:
+    ingress:
+      enabled: true
+      annotations:
+        # Setting DNS name
+        kubernetes.io/ingress.class: nginx-external
+        # Putting prometheus behind oauth2 proxy (github login)
+      hosts:
+        - alertmanager
+    alertmanagerSpec:
+      externalUrl: ""
+
+cluster_name: k8s
+
+global_recievers:
+  slack:
+    name: ""
+    url: ""
+    channel: ""
+  pagerduty:
+    name: k8s_pg_alerts
+    integration_key: ""
+
+monitoring:
+  enabled: true
+  alerting:
+    enabled: false
+
+k8s-alert-router:
+  alerts:
+    selectors:
+      secretName: ""
+      alertManagerNamespace: ""
+    receivers:
+      warningReceiverName: ""
+      # Leave empty to disable pagerduty/critical alerts
+      criticalReceiverName: ""
+
+thanos_ingress:
+  enabled: false
+  annotations: {}
+  hostname: ""
+  tls:
+    secretName: ""
+    hostname: ""
+
+prometheus_cluster:
+  enabled: false
+  workers: 2

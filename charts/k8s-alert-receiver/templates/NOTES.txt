@@ -1,0 +1,9 @@
+{{ if (.Values.pagerduty.service_key) or (.Values.slack.webhook_url) }}
+{{- if .Values.slack.webhook_url }}
+Created slack receiver with name: {{ coalesce .Values.slack.name (printf "slack_%s" (include "k8s-alert-receiver.fullname" .)) }}
+{{- end }}
+
+{{- if .Values.pagerduty.service_key }}
+Created pagerduty receiver with name:{{ coalesce .Values.pagerduty.name (printf "pagerduty_%s" (include "k8s-alert-receiver.fullname" .)) }}
+{{- end }}
+{{ end }}

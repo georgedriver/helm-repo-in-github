@@ -1,0 +1,89 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  labels:
+    app: {{ .Values.appName }}
+    release: {{ .Values.releaseVersion }}
+    {{- if .Values.autorunRestart.enabled }}
+    autorunLabel: {{ .Values.autorunRestart.label }}
+    {{- end}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  {{- if .Values.deployStrategy }}
+  strategy:
+    type: {{ .Values.deployStrategy }}
+  {{- end }}
+
+  {{- if .Values.minReadySeconds }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
+
+  {{- if .Values.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
+  {{- end }}
+
+
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+      annotations:
+
+        {{- range $key, $val := .Values.deployment.annotations }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end }}
+
+        {{- if .Values.vault.enabled }}
+        vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+        vault.security.banzaicloud.io/vault-skip-verify: "true"
+        {{- end }}
+    spec:
+      imagePullSecrets:
+         - name: acrcred
+
+
+      volumes:
+        {{- range .Values.volumes }}
+        - name: {{ .name }}
+
+          {{- if .configMap }}
+          configMap:
+{{ toYaml .configMap | indent 12 }}
+          {{- end }}
+
+          {{- if .emptyDir }}
+          emptyDir:
+{{ toYaml .emptyDir | indent 12 }}
+          {{- end }}
+
+        {{- end }}
+
+      containers:
+        {{ include "k8s-generic-service.Helper.AppContainer" . | indent 8 }}
+
+        {{- if .Values.healthProbe.http.adapter.enabled }}
+          {{ include "k8s-generic-service.Helper.HealthAdapterContainer" . | indent 8 }}
+        {{- end}}
+
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
+    {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+    {{- end}}

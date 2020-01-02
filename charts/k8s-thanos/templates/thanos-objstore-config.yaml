@@ -1,0 +1,14 @@
+{{- if .Values.thanos.objstoreFile }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: thanos-{{ .Values.cluster_name }}-objstore-config
+  labels:
+    app: {{ template "k8s-thanos.name" . }}
+    chart: {{ template "k8s-thanos.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+type: Opaque
+data:
+  thanos.yaml: {{ b64enc .Values.thanos.objstoreFile }}
+{{- end }}

@@ -1,0 +1,29 @@
+apiVersion: monitoring.alerts.com/v1alpha1
+kind: AlertManagerReceiver
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "k8s-alert-receiver.name" . }}
+    helm.sh/chart: {{ include "k8s-alert-receiver.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-monitoring: "true"
+  name: {{ template "k8s-alert-receiver.fullname" . }}
+spec:
+  target_configuration:
+    secret_name: {{ .Values.target_configuration.name }}
+    namespace: {{ .Values.target_configuration.namespace }}
+  receivers:
+    # A uniqname of a recevier
+    {{- if .Values.slack.webhook_url }}
+    - name: {{ coalesce .Values.slack.name (printf "slack_%s" (include "k8s-alert-receiver.fullname" .)) }}
+      slack_configs:
+        - channel: {{ .Values.slack.channel }}
+          api_url: {{ .Values.slack.webhook_url }}
+          title: {{ printf "'{{ template \"custom_title\" . }}'" }}
+          text: {{ printf "'{{ template \"custom_slack_message\" . }}'" }}
+    {{- end }}
+    {{- if .Values.pagerduty.service_key }}
+    - name: {{ coalesce .Values.pagerduty.name (printf "pagerduty_%s" (include "k8s-alert-receiver.fullname" .)) }}
+      pagerduty_configs:
+        - service_key: {{ .Values.pagerduty.service_key }}
+    {{- end }}

@@ -1,0 +1,37 @@
+{{- if .Values.runJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.runJob.name }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}-job
+      annotations:
+        {{- if .Values.vault.enabled }}
+        vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+        vault.security.banzaicloud.io/vault-skip-verify: "true"
+        {{- end }}
+        sidecar.istio.io/inject: "false" # Jobs cannot use istio proxy because it does not run to completion
+    spec:
+      imagePullSecrets:
+        - name: acrcred
+      containers:
+      - name: {{ .Values.runJob.name }}-pod
+        image: "{{ .Values.runJob.image.repository }}:{{ .Values.runJob.image.tag }}"
+        command:
+{{ toYaml .Values.runJob.command | indent 8 }}
+        env:
+        - name: WE_ENV
+          value: {{ .Values.geEnv }}
+        - name: DEPLOY_SHA
+          value: {{ .Values.deploySHA }}
+      {{- range .Values.envVars }}
+        - name: "{{ .Name }}"
+          value: "{{ .Value }}"
+      {{- end }}
+      restartPolicy: Never
+  backoffLimit: {{ .Values.runJob.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.runJob.activeDeadlineSeconds }}
+{{- end }}

@@ -1,0 +1,27 @@
+{{- $root := . -}}
+
+{{- if .Values.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.appName }}-service
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  type: ClusterIP
+  ports:
+    {{- range .Values.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .containerPort | default .port }}
+      protocol: {{ .protocol }}
+      name: {{ .name }}
+    {{- end }}
+    {{- if .Values.healthProbe.http.adapter.enabled }}
+    - port: {{ .Values.healthProbe.port }}
+      targetPort: {{ .Values.healthProbe.port }}
+      protocol: TCP
+      name: http-{{ .Values.appName }}-health
+    {{- end }}
+  selector:
+    app: {{ .Values.appName }}
+{{- end }}

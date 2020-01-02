@@ -1,0 +1,23 @@
+{{ $promOper := index .Values "prometheus-operator" }}
+{{- if $promOper.prometheus.prometheusSpec.thanos }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "k8s-prometheus-operator.fullname" . }}-thanos-sc
+  labels:
+    app: {{ template "k8s-prometheus-operator.name" . }}
+    chart: {{ template "k8s-prometheus-operator.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+spec:
+  ports:
+  - name: grpc
+    port: 10901
+    protocol: TCP
+    targetPort: grpc
+  selector:
+    app: prometheus
+    prometheus: {{ template "k8s-prometheus-operator.fullname" . }}-prometheus
+  sessionAffinity: None
+  type: ClusterIP
+{{- end }}

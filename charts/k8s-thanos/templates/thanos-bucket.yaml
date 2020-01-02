@@ -1,0 +1,19 @@
+{{- if and .Values.thanosBucket.enabled }}
+apiVersion: service-operator.aws/v1alpha1
+kind: S3Bucket
+metadata:
+  name: {{ .Values.thanosBucket.cluster_name}}-{{ .Values.thanosBucket.namespace }}-{{ .Values.thanosBucket.s3bucket_name }}
+  labels:
+    app: {{ template "k8s-thanos.name" . }}
+    chart: {{ template "k8s-thanos.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+spec:
+  versioning: {{ .Values.thanosBucket.versioning }}
+  accessControl: {{ .Values.thanosBucket.accessControl}}
+  website:
+    enabled: false
+  logging:
+    enabled: false
+    prefix: "archive"
+{{- end }}

@@ -1,0 +1,35 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dingtalk-hook
+spec:
+  template:
+    metadata:
+      labels:
+        app: dingtalk-hook
+    spec:
+      {{- if .Values.imagePullSecrets }} 
+      imagePullSecrets:
+      - name: "{{ .Values.imagePullSecrets }}"
+      {{- end }}
+      containers:
+      - name: dingtalk-hook
+        image: "{{ .Values.image }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: http
+        env:
+        - name: ROBOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: dingtalk-token.service-secrets
+              key: robot_token
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 50m
+            memory: 100Mi

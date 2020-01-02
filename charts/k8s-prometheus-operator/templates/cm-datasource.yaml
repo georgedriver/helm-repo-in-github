@@ -1,0 +1,22 @@
+{{ $promOper := index .Values "prometheus-operator" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "k8s-prometheus-operator.fullname" . }}-datasource
+  labels:
+    {{ .Values.datasource.auto_load_label }}: "True"
+    app: {{ template "k8s-prometheus-operator.name" . }}
+    chart: {{ template "k8s-prometheus-operator.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+data:
+  prometheus-datasource.yaml: |-
+    # config file version
+    apiVersion: 1
+    datasources:
+    - name: prometheus
+      type: prometheus
+      basicAuth: false
+      access: proxy
+      url: {{ printf "http://%s-prometheus:9090" .Release.Name }}
+      isDefault: {{ .Values.datasource.isDefault }}

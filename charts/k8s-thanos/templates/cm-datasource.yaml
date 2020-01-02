@@ -1,0 +1,23 @@
+{{- if and .Values.thanos.query.enabled .Values.datasource.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "k8s-thanos.fullname" . }}-datasource
+  labels:
+    {{ .Values.datasource.auto_load_label }}: "True"
+    app: {{ template "k8s-thanos.name" . }}
+    chart: {{ template "k8s-thanos.chart" . }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+data:
+  prometheus-datasource.yaml: |-
+    # config file version
+    apiVersion: 1
+    datasources:
+    - name: prometheus
+      type: prometheus
+      basicAuth: false
+      access: proxy
+      url: {{ printf "http://%s-query-http.%s:10902" .Release.Name .Release.Namespace }}
+      isDefault: {{ .Values.datasource.isDefault }}
+{{- end }}

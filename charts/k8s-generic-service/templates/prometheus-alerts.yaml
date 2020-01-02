@@ -1,0 +1,23 @@
+{{- $root := . -}}
+{{- if or .Values.alerts.extraAlerts .Values.alerts.enableDefaultAlerts }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Values.appName }}-alerts
+  labels:
+    app: {{ .Values.appName }}
+    release: {{ .Values.releaseVersion }}
+    k8s-monitoring: "true"
+spec:
+  groups:
+  - name: {{ .Values.appName }}.rules
+    rules:
+    {{- if .Values.alerts.enableDefaultAlerts -}}
+    {{- range $index, $alert := .Values.alerts.defaultAlerts -}}
+    {{- include "alertRuleTemplate.alertTemplate" (dict "alert" $alert "appName" $.Values.appName "geEnv" $.Values.geEnv "deploySHA" $.Values.deploySHA "releaseVersion" $.Values.releaseVersion "Release" $.Release "Chart" $.Chart ) | nindent 4 -}}
+    {{- end -}}
+    {{- end -}}
+    {{- range $index, $alert := .Values.alerts.extraAlerts -}}
+    {{- include "alertRuleTemplate.alertTemplate" (dict "alert" $alert "appName" $.Values.appName "geEnv" $.Values.geEnv "deploySHA" $.Values.deploySHA "releaseVersion" $.Values.releaseVersion "Release" $.Release "Chart" $.Chart ) | nindent 4 -}}
+    {{- end -}}
+{{- end }}

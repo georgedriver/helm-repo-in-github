@@ -1,0 +1,144 @@
+cluster_name: k8s-charlie
+
+thanosBucket:
+  enabled: true
+  accessControl: Private # this can be  AuthenticatedRead | AwsExecRead | BucketOwnerRead | BucketOwnerFullControl | LogDeliveryWrite | Private | PublicRead | PublicReadWrite
+  versioning: false
+  cluster_name: k8s-charlie
+  namespace: system-monitoring
+  s3bucket_name: thanos-object-store
+
+# Variables passed to the stable/thanos chart and its components
+# Definitions https://github.com/banzaicloud/banzai-charts/tree/master/thanos
+thanos:
+  image:
+    repository: quay.io/thanos/thanos
+    tag: v0.8.1
+    pullPolicy: IfNotPresent
+
+  # Thanos Store Gateway
+  # TODO:
+  # 1. determine replica count
+  # 2. Set security context so that only thanos components can access
+  store:
+    enabled: true
+    # annotations:
+    annotations:
+      iam.amazonaws.com/role: arn:aws:iam::037607304605:role/ThanosAdmin
+    indexCacheSize: 2GB
+    chunkPoolSize: 8GB
+    metrics:
+      serviceMonitor:
+        enabled: true
+        labels:
+          k8s-monitoring: "true"
+      # annotations:
+      #   enabled: true
+
+  # Thanos Query
+  # TODO:
+  # 1. determine replica count
+  # 2. Set security context so that only grafana & thanos components can access
+  # 3. set ingress settings
+  query:
+    enabled: true
+    # annotations:
+    annotations:
+      iam.amazonaws.com/role: arn:aws:iam::038807304605:role/ThanosAdmin
+    http:
+      ingress:
+        enabled: false
+    grpc:
+      ingress:
+        enabled: false
+        externalEnabled: false
+        annotations: {}
+        hosts: []
+        tls:
+          hosts: []
+          secretName: "grpc.tls"
+
+    autoscaling:
+      enabled: true
+      targetCPUUtilizationPercentage: 50
+
+    basicAuth:
+      authSecret: ""
+
+    metrics:
+      serviceMonitor:
+        enabled: true
+        labels:
+          k8s-monitoring: "true"
+      # annotations:
+      #   enabled: true
+
+  # Thanos Compactor
+  # TODO:
+  # 1. Set security context so that only thanos components can access
+  compact:
+    enabled: true
+    # annotations:
+    annotations:
+      iam.amazonaws.com/role: arn:aws:iam::037609904605:role/ThanosAdmin
+    dataVolume:
+      size: "100Gi"
+      backend:
+        persistentVolumeClaim:
+          claimName: compact-volume
+          storageClassName: aws-ebs-io2
+    consistencyDelay: "30m"
+    retentionResolutionRaw: "30d"
+    retentionResolution5m: "120d"
+    retentionResolution1h: "10y"
+
+    metrics:
+      serviceMonitor:
+        enabled: true
+        labels:
+          k8s-monitoring: "true"
+      # annotations:
+      #   enabled: true
+
+  bucket:
+    enabled: true
+
+  metrics:
+    serviceMonitor:
+      enabled: true
+      labels:
+        k8s-monitoring: "true"
+    # annotations:
+    #   enabled: true
+
+  sidecar:
+    enabled: true
+
+  # This is the general backend configuration. Please se the examples below to configurate object store.
+  # More information can be found at thanos github repositoriy: https://github.com/thanos-io/thanos/blob/master/docs/storage.md
+  # Text representation of the configuration
+  # This will be also used for creating secret of thanos-{{ cluster_name }}-objstore-config, see PR#376
+  objstoreFile: ""
+  # YAML representation of the configuration. It's mutually exclusive with objstoreFile.
+
+datasource:
+  # When enabled a resource CM will be created for Grafana, to connect Query as a datasource
+  enabled: true
+  # The label key name to be added. It need to match the Grafana sidecar.datasources.label	setting so it will be picked by Grafana
+  auto_load_label: k8s-grafana-resource
+  isDefault: false
+
+monitoring:
+  enabled: true
+  alerting:
+    enabled: false
+
+k8s-alert-router:
+  alerts:
+    selectors:
+      secretName: ""
+      alertManagerNamespace: ""
+    receivers:
+      warningReceiverName: ""
+      # Leave empty to disable pagerduty/critical alerts
+      criticalReceiverName: ""
