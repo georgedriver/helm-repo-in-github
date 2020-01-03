@@ -1,0 +1,9 @@
+dependencies:
+- name: nginx-ingress
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 1.27.1
+- name: k8s-alert-router
+  repository: https://raw.githubusercontent.com/georgedriver/helm-repo-in-github/master
+  version: 0.1.8
+digest: sha256:d0ed19a9dbd23cfd9691de1d05f047964520da7173959818bf121b9ebd106303
+generated: "2020-01-03T16:46:56.649547+08:00"

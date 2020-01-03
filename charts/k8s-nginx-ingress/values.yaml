@@ -1,0 +1,26 @@
+dashboard:
+  enabled: true
+nginx-ingress:
+    controller:
+        name: controller
+        stats:
+            enabled: true
+        metrics:
+            enabled: true
+        service:
+            externalIPs:
+              - 192.168.99.100
+monitoring:
+    enabled: true
+    alerting:
+      # Disabling alerting until we fix it
+      enabled: false
+k8s-alert-router:
+  alerts:
+    selectors:
+      secretName: ""
+      alertManagerNamespace: ""
+  receivers:
+    warningReceiverName: ""
+    # Leave empty to disable pagerduty/critical alerts
+    criticalReceiverName: ""

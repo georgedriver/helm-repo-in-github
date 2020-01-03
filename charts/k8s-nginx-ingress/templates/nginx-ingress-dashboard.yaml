@@ -1,0 +1,20 @@
+{{- if .Values.dashboard.enabled }} 
+{{ $app_name := include "k8s-nginx-ingress.name" . }}
+{{ $chart_name := include "k8s-nginx-ingress.chart" . }}
+{{ $root := . }}
+{{ range $path, $bytes := .Files.Glob "dashboards/*.json" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $app_name }}-{{ base ( trimSuffix ".json" $path) }}
+  labels:
+    grafana-dashboard: "True"
+    app: {{ $app_name }}
+    chart: {{ $chart_name }}
+    release: {{ $.Release.Name }}
+    heritage: {{ $.Release.Service }}
+data:
+{{ ($root.Files.Glob $path).AsConfig | indent 2 }}
+---
+{{ end }}
+{{- end }}

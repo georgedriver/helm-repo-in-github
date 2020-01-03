@@ -1,0 +1,119 @@
+{{ $deployment:= printf "%s-%s-%s" .Release.Name "nginx-ingress" "controller" | trunc 63 | trimSuffix "-" | quote }}
+{{ $httpDeployment:= printf "%s-%s-%s" .Release.Name "nginx-ingress" "default-backend" | trunc 63 | trimSuffix "-" | quote}}
+{{- if (.Values.monitoring.enabled) and (.Values.monitoring.alerting.enabled) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ include "k8s-nginx-ingress.name" . }}
+    helm.sh/chart: {{ include "k8s-nginx-ingress.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-monitoring: "true"
+  name: {{ template "k8s-nginx-ingress.fullname" . }}
+spec:
+    groups:
+    - name: nginxIngress.rules
+      rules:
+      - alert: nginxIngressReplicasDown
+        annotations:
+          description: The number of replicas for deployment {{ "{{ $labels.alert_source }}" }} has fallen below the desired number of replicas
+          summary: nginx-ingress replicas down
+        expr: sum(rate(kube_deployment_status_replicas{deployment={{ $deployment }}}[5m])) < sum(rate(kube_deployment_spec_replicas{deployment={{ $deployment }}}[5m]))
+        for: 5m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+      - alert: nginxIngressErrorsTooHighWarning
+        annotations:
+          description: nginx ingress external detects a high error rate for deployment {{ "{{ $labels.alert_source }}" }}
+          summary: nginx-ingress detects high error rate
+        # do we need name="nginx-ingress-external"
+        expr: ((sum(rate(nginx_http_requests_total{status=~"4.."}[5m])) + sum(rate(nginx_http_requests_total{status=~"5.."}[5m]))) / sum(rate(nginx_http_requests_total[5m]))) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+      - alert: nginxIngressErrorsTooHighCritical
+        annotations:
+          description: nginx ingress external detects a critically high error rate for deployment {{ "{{ $labels.alert_source }}" }}
+          summary: nginx-ingress detects high error rate
+        # do we need name="nginx-ingress-external"
+        expr: ((sum(rate(nginx_http_requests_total{status=~"4.."}[5m])) + sum(rate(nginx_http_requests_total{status=~"5.."}[5m]))) / sum(rate(nginx_http_requests_total[5m]))) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+      - alert: nginxIngressSlowIAMRequest
+        annotations:
+          description: nginx-ingress is slow to complete IAM requests {{ "{{ $labels.namespace }}/{{ $labels.pod }}" }}.
+          summary: nginx-ingress slow IAM request time to complete
+        expr: nginx_http_request_duration_seconds_bucket > 30
+        for: 5m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+      - alert: NginxIngressSlowHttpResponse
+        annotations:
+          description: nginx-ingress is showing slow response time for HTTP {{ "{{ $labels.namespace }}/{{ $labels.pod }}" }}.
+          summary: nginx-ingress slow http response
+        expr: nginx_http_request_duration_seconds_bucket > 30
+        for: 5m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+      - alert: NginxIngressConfigurationFailedRealod
+        annotations:
+          description: nginx-ingress configuration failed to reload on {{ "{{ $labels.controller_class }}/{{ $labels.controller_pod }}" }}.
+          summary: nginx-ingress failed to reload configuration
+        expr: nginx_ingress_controller_config_last_reload_successful == 0
+        for: 2m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+
+    # httpBackend
+    - name: httpBackend.rules
+      rules:
+      # counter is reset when there is a change, so we do not need rate
+      - alert: httpBackendReplicasDown
+        annotations:
+          description: The number of replicas has fallen below the desired number of replicas for deployment {{ "{{ $labels.alert_source }}" }}
+          summary: http-backend replicas down
+        expr: sum(rate(kube_deployment_status_replicas{deployment={{ $httpDeployment }}}[5m])) < sum(rate(kube_deployment_spec_replicas{deployment={{ $httpDeployment }}}[5m]))
+        for: 5m
+        labels:
+          severity: warning
+          alert_source: {{ .Release.Name }}
+          namespace: {{ .Release.Namespace }}
+
+  # groups:
+  # TODO: Fix alerts once we have it deploy on a real cluster (not minikube)
+  # we are not sure if this code is currently working
+  # - name: nginxIngress.rules
+  #   rules:
+  #   - alert: nginxIngressDownOrMissing
+  #     annotations:
+  #       description: An unexpected number of nginx-ingress are scraped or nginx-ingress disappeared from discovery.
+  #       summary: nginx-ingress down or missing
+  #     expr: sum(nginxIngress_healthcheck_status) - sum(kube_daemonset_status_desired_number_scheduled{daemonset="{{ .Release.Name }}-nginx-ingress"}) < 0
+  #     for: 5m
+  #     labels:
+  #       severity: warning
+  #       alert_source: {{ template "k8s-nginx-ingress.fullname" . }}
+  #   - alert: nginxIngressSlowHttpResponse
+  #     annotations:
+  #       description: nginxIngress is showing slow response time for HTTP {{ "{{ $labels.namespace }}/{{ $labels.pod }}" }}.
+  #       summary: nginxIngress' slow http response
+  #     expr: nginxIngress_http_request_duration_seconds_bucket > 30
+  #     for: 5m
+  #     labels:
+  #       severity: warning
+  #       alert_source: {{ template "k8s-nginx-ingress.fullname" . }}
+{{- end }}

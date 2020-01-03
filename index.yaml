@@ -3,7 +3,7 @@ entries:
   alert-operator:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.444249+08:00"
+    created: "2020-01-03T16:47:06.23788+08:00"
     description: A Helm chart for alert-operator
     digest: 29daa114e4a137788b52571a3a5a02830cd8ac333ce5693f3eec452764d100ef
     name: alert-operator
@@ -15,7 +15,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.443857+08:00"
+    created: "2020-01-03T16:47:06.237091+08:00"
     description: A Helm chart for alert-operator
     digest: fa67d98f497648e4132b7cbd088654779230be56f5290bab881d3f307d33caad
     name: alert-operator
@@ -28,7 +28,7 @@ entries:
   alertmanager-dingtalk-hook:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.444533+08:00"
+    created: "2020-01-03T16:47:06.238269+08:00"
     description: A Helm chart for alertmanager-dingtalk-hook
     digest: 98b6fab0198febad66618cc647cb64445d634944fea6adf77e932dab543cf85d
     name: alertmanager-dingtalk-hook
@@ -38,7 +38,7 @@ entries:
   clash-client:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.444876+08:00"
+    created: "2020-01-03T16:47:06.238839+08:00"
     description: A Helm chart for Kubernetes
     digest: 12e83944d2f026886f53491adaf7df93de62461cb08ec6909c7c6e932fdc6a7e
     name: clash-client
@@ -48,7 +48,7 @@ entries:
   k8s-alert-receiver:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.4458+08:00"
+    created: "2020-01-03T16:47:06.23936+08:00"
     description: A Helm chart for K8s AlertManagerReceiver CR
     digest: fd448d2b591dbee37996338a66c8ef20594c9b9cae7be9adef568e3f3dd685dc
     name: k8s-alert-receiver
@@ -58,7 +58,7 @@ entries:
   k8s-alert-router:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.446142+08:00"
+    created: "2020-01-03T16:47:06.240639+08:00"
     description: A Helm chart the k8s-alert-router
     digest: 5b874c1969b53161303ae96d6766bfab0b869dd9ec0b125287c0d5ece9f183ca
     name: k8s-alert-router
@@ -68,7 +68,7 @@ entries:
   k8s-generic-service:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.44724+08:00"
+    created: "2020-01-03T16:47:06.242253+08:00"
     description: Generic service chart
     digest: 4a447e5dede478dc83f0c4d879357d28ca4966b9868304f21340c747e8172001
     name: k8s-generic-service
@@ -78,7 +78,7 @@ entries:
   k8s-grafana:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.449774+08:00"
+    created: "2020-01-03T16:47:06.245085+08:00"
     description: A Helm chart for k8s Grafana
     digest: 53da6f896151a67c2984b862b37d7ff4857e7858e8c57695009882108765add3
     name: k8s-grafana
@@ -88,10 +88,20 @@ entries:
     urls:
     - k8s-grafana-0.1.10.tgz
     version: 0.1.10
+  k8s-nginx-ingress:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2020-01-03T16:47:06.247279+08:00"
+    description: An Nginx Chart for Kubernetes
+    digest: 584596294f1e3f3f97290bb9fe268092e3533a07be4b6442ca989b7596e370ec
+    name: k8s-nginx-ingress
+    urls:
+    - k8s-nginx-ingress-0.2.5.tgz
+    version: 0.2.5
   k8s-prometheus-operator:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.49498+08:00"
+    created: "2020-01-03T16:47:06.28927+08:00"
     description: A Helm chart for k8s prometheus operator and prometheus.
     digest: 203d9451252894d94dfb40b0a6556648275e542c1786fc6cf0729216f3b87ee8
     name: k8s-prometheus-operator
@@ -102,7 +112,7 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.480599+08:00"
+    created: "2020-01-03T16:47:06.275975+08:00"
     description: A Helm chart for k8s prometheus operator and prometheus.
     digest: 0e677a5d3b5c13dffa62f77e60453a9a2956a977d5b1f35f29a63f37aa2206ac
     name: k8s-prometheus-operator
@@ -113,7 +123,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.465891+08:00"
+    created: "2020-01-03T16:47:06.262459+08:00"
     description: A Helm chart for k8s prometheus operator and prometheus.
     digest: b22f94b44dc69e50f2f5ab9b8a9717ff88397b5913e6a92e103565eecf0c26a4
     name: k8s-prometheus-operator
@@ -125,7 +135,7 @@ entries:
   k8s-thanos:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.501523+08:00"
+    created: "2020-01-03T16:47:06.296731+08:00"
     description: A Helm chart for k8s Thanos components
     digest: b6ff57114bd153ac7cf6eb761d71d998452cfc87c9a5b2695f738dd41e0105bd
     name: k8s-thanos
@@ -136,7 +146,7 @@ entries:
     version: 0.2.14
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.500012+08:00"
+    created: "2020-01-03T16:47:06.294395+08:00"
     description: A Helm chart for k8s Thanos components
     digest: f21a684a5f194bd9aa5ee35742c530aaf3be5b881ab33a2b8eedfba66b57805c
     name: k8s-thanos
@@ -147,7 +157,7 @@ entries:
     version: 0.2.13
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.498489+08:00"
+    created: "2020-01-03T16:47:06.292574+08:00"
     description: A Helm chart for k8s Thanos components
     digest: 4fa66abbec9f856dd6ee6f5ce146e0d2ba18f24cb6b18fda4fd0d657dcd9d6af
     name: k8s-thanos
@@ -158,7 +168,7 @@ entries:
     version: 0.2.12
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.496809+08:00"
+    created: "2020-01-03T16:47:06.291091+08:00"
     description: A Helm chart for k8s Thanos components
     digest: e28aa23867cfb18ade1a9d6d3771f4d87083188495e8647564a001e6eba6d985
     name: k8s-thanos
@@ -170,7 +180,7 @@ entries:
   vault-agent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.502231+08:00"
+    created: "2020-01-03T16:47:06.297616+08:00"
     description: A Helm chart for Vault agent
     digest: 592af12ad93a07537886f2f791fc4c235881616748573988804f6fd664ef8f0e
     name: vault-agent
@@ -179,7 +189,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.502002+08:00"
+    created: "2020-01-03T16:47:06.29734+08:00"
     description: A Helm chart for Vault agent
     digest: 77a217bcaabe32c7740cbcbd17daacd4d321e4d07cd506978a7dad371249c225
     name: vault-agent
@@ -188,11 +198,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-01-02T15:12:13.501765+08:00"
+    created: "2020-01-03T16:47:06.297049+08:00"
     description: A Helm chart for Vault agent
     digest: e686cc9a928da1b7575153614700be5584448ccfd61d624a31e3e77dfbb82608
     name: vault-agent
     urls:
     - vault-agent-0.1.0.tgz
     version: 0.1.0
-generated: "2020-01-02T15:12:13.443305+08:00"
+generated: "2020-01-03T16:47:06.236193+08:00"
