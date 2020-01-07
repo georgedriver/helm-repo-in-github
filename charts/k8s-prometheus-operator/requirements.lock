@@ -1,0 +1,9 @@
+dependencies:
+- name: prometheus-operator
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 8.5.0
+- name: k8s-alert-router
+  repository: https://raw.githubusercontent.com/georgedriver/helm-repo-in-github/master
+  version: 0.1.8
+digest: sha256:5a1cce21ee82b259bf8845d4cc18019cb25d1e190e7ec3b47f8a9b29fef6a0d7
+generated: "2020-01-07T16:59:43.31454+08:00"
