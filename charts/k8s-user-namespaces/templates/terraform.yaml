@@ -1,0 +1,11 @@
+# Generate tfvars to replace the default value from https://github.com/xxxxxx/terragrunt-infrastructure-modules/blob/master/k8s/jushita/variables.tf#L13
+{{ $numroles := mul (len .Values.namespaces) 2 | add 3 }}
+{{- if .Values.install.terraforms }}
+user_namespaces = [
+{{ range $i, $ns := .Values.namespaces -}}
+  {
+    name                      = {{ $ns.name | quote }}
+  },
+{{- end }}
+]
+{{- end }}

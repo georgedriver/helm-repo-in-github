@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "home-monitor.fullname" . }}
+  labels:
+    k8s-monitoring: "true"
+{{ include "home-monitor.labels" . | indent 4 }}
+spec:
+  jobLabel: {{ .Values.appName }}
+  endpoints:
+  - honorLabels: true
+    interval: 30s
+    path: {{ .Values.service.path }}
+    port: metrics
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}

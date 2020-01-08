@@ -2,6 +2,6 @@ apiVersion: v1
 appVersion: "1.0"
 description: A Helm chart for k8s Thanos components
 name: k8s-thanos
-version: 0.2.14
+version: 0.2.15
 sources:
   - https://github.com/banzaicloud/banzai-charts/tree/master/thanos

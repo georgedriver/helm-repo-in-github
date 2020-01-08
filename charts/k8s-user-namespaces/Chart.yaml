@@ -1,0 +1,9 @@
+apiVersion: v1
+name: k8s-user-namespaces
+version: 0.1.1
+tillerVersion: ">=2.7.2-0"
+description: Helm chart for maintaining user namespaces
+keywords:
+  - namespace
+  - roles
+engine: gotpl

@@ -1,0 +1,7 @@
+namespaces:
+  - name: sample
+    owner: "george@test.com"
+    istio: disabled
+    kube2iam_allowed_roles : "*"
+    slack_channel: "slack_general"
+    slack_webhook: "https://hooks.slack.com/services/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"

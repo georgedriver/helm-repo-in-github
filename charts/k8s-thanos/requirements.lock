@@ -1,0 +1,9 @@
+dependencies:
+- name: thanos
+  repository: file://../thanos
+  version: 0.3.12
+- name: k8s-alert-router
+  repository: https://raw.githubusercontent.com/georgedriver/helm-repo-in-github/master
+  version: 0.1.8
+digest: sha256:91c73d71841e74ac843f8dd812c3bc5faf1c311fff6cf00027a695055fd4b963
+generated: "2020-01-19T11:43:34.484275+08:00"
