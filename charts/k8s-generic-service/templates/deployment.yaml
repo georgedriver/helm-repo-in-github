@@ -42,6 +42,10 @@ spec:
         vault.security.banzaicloud.io/vault-skip-verify: "true"
         {{- end }}
     spec:
+      {{- if .Values.hostAliases }}
+      hostAliases:
+{{- toYaml .Values.hostAliases | nindent 6 }}
+      {{- end }}
       imagePullSecrets:
          - name: acrcred
 
