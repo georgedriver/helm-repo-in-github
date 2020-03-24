@@ -5,17 +5,8 @@
 appName: gecron
 envVars: []
 
-command:
-  # - "sleep"
-args:
-  # - 3600
-  # - "boop"
-
 image:
   pullPolicy: Always
-
-deployment:
-  annotations: {}
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
