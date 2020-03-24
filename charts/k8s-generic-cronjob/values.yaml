@@ -1,0 +1,94 @@
+# Default values for generic_service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appName: gecron
+envVars: []
+
+command:
+  # - "sleep"
+args:
+  # - 3600
+  # - "boop"
+
+image:
+  pullPolicy: Always
+
+deployment:
+  annotations: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+cronjobs: []
+  # - schedule: "*/5 * * * *"
+  #   successfulJobsHistoryLimit: 3
+  #   failedJobsHistoryLimit: 3
+  #   command: ["echo"]
+  #   args: ["Hello world"]
+  #   repository: ubuntu
+  #   tag: latest
+  #   name: "someCronJob"
+  #   restartPolicy: OnFailure
+  # - schedule: "*/10 * * * *"
+  #   successfulJobsHistoryLimit: 3
+  #   failedJobsHistoryLimit: 3
+  #   command: ["echo"]
+  #   args: ["Bye", "world"]
+  #   repository: ubuntu
+  #   tag: latest
+  #   name: "someOtherJob"
+  #   restartPolicy: OnFailure
+
+vault:
+  enabled: true
+
+volumes: []
+  # - name: config
+  #   subPath: "/boop"
+  #   readOnly: true
+  #   configMap:
+  #     name: someConfigMap
+  #   mountPath: /config
+
+  # - name: boop
+  #   emptyDir:
+  #     medium: Memory
+  #   mountPath: /boop
+
+configMapEnvVars: []
+configMaps: []
+# - name: george-config
+#   labels:
+#     env: "staging"
+#   data:
+#     config.yml: |-
+#       server:
+#         applicationConnectors:
+#         - type: http
+#           port: ${george_PORT:-5000}
+#       db:
+#         driverClass: org.postgresql.Driver
+#         url: jdbc:postgresql://${POSTGRES_HOST:-localhost}:${POSTGRES_PORT:-5432}/${POSTGRES_DB}
+#         user: ${POSTGRES_USER}
+#         password: ${POSTGRES_PASSWORD}
+
+serviceAccount:
+  enabled: false
+  # name: serviceAccountName

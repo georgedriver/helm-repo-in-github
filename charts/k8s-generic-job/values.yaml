@@ -1,0 +1,32 @@
+# Default values for generic_service.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appName: testApp
+releaseVersion: not-specified
+envVars: []
+
+geEnv: "staging"
+deploySHA: "xxxxxxx"
+
+vault:
+  enabled: false
+
+volumes: []
+  # - name: config
+  #   configMap:
+  #     name: someConfigMap
+  #   mountPath: /config
+
+  # - name: boop
+  #   emptyDir:
+  #     medium: Memory
+  #   mountPath: /boop
+
+runJob:
+  enabled: false
+  name: GenericJob
+  image:
+    repository: ubuntu
+    tag: latest
+  command: ["echo", "hello"]
