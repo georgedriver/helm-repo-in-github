@@ -35,6 +35,10 @@ spec:
             sidecar.istio.io/inject: "false" # Jobs cannot use istio proxy because it does not run to completion
 
         spec:
+          {{- if $root.Values.hostAliases }}
+          hostAliases:
+{{- toYaml $root.Values.hostAliases | nindent 10 }}
+          {{- end }}
           imagePullSecrets:
             - name: acrcred
 

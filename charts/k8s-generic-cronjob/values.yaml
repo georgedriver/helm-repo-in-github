@@ -27,27 +27,27 @@ tolerations: []
 
 affinity: {}
 
-cronjobs: []
-  # - schedule: "*/5 * * * *"
-  #   successfulJobsHistoryLimit: 3
-  #   failedJobsHistoryLimit: 3
-  #   concurrencyPolicy: Allow
-  #   command: ["echo"]
-  #   args: ["Hello world"]
-  #   repository: ubuntu
-  #   tag: latest
-  #   name: "some-cron-job"
-  #   restartPolicy: OnFailure
-  # - schedule: "*/10 * * * *"
-  #   successfulJobsHistoryLimit: 3
-  #   failedJobsHistoryLimit: 3
-  #   concurrencyPolicy: Allow
-  #   command: ["echo"]
-  #   args: ["Bye", "world"]
-  #   repository: ubuntu
-  #   tag: latest
-  #   name: "some-other-job"
-  #   restartPolicy: OnFailure
+cronjobs:
+  - schedule: "*/5 * * * *"
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+    concurrencyPolicy: Allow
+    command: ["echo"]
+    args: ["Hello world"]
+    repository: ubuntu
+    tag: latest
+    name: "some-cron-job"
+    restartPolicy: OnFailure
+  - schedule: "*/10 * * * *"
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+    concurrencyPolicy: Allow
+    command: ["echo"]
+    args: ["Bye", "world"]
+    repository: ubuntu
+    tag: latest
+    name: "some-other-job"
+    restartPolicy: OnFailure
 
 vault:
   enabled: true
@@ -85,3 +85,13 @@ configMaps: []
 serviceAccount:
   enabled: false
   # name: serviceAccountName
+
+hostAliases:
+- ip: "127.0.0.1"
+  hostnames:
+  - "foo.local"
+  - "bar.local"
+- ip: "10.1.2.3"
+  hostnames:
+  - "foo.remote"
+  - "bar.remote"
