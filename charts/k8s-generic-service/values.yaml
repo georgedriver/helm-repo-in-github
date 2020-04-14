@@ -284,5 +284,4 @@ autorunRestart:
 #   - "foo.remote"
 #   - "bar.remote"
 
-privileged:
-  enabled: false
+privileged: false

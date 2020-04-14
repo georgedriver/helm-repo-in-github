@@ -2,7 +2,7 @@
 - name: {{ .Values.appName }}
   image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.privileged.enabled }}
+  {{- if .Values.privileged }}
   securityContext:
     privileged: true
   {{- end}}
