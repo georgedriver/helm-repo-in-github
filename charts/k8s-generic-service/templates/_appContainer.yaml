@@ -2,6 +2,10 @@
 - name: {{ .Values.appName }}
   image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- if .Values.privileged.enabled }}
+  securityContext:
+    privileged: true
+  {{- end}}
   volumeMounts:
     {{- range .Values.volumes }}
     - name: {{ .name }}

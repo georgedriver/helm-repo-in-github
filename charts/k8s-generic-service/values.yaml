@@ -283,3 +283,6 @@ autorunRestart:
 #   hostnames:
 #   - "foo.remote"
 #   - "bar.remote"
+
+privileged:
+  enabled: false
