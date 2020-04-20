@@ -91,6 +91,7 @@ deployment:
   annotations: {}
 
 service:
+  # type: LoadBalancer
   # annotations:
   #   service.beta.kubernetes.io/alicloud-loadbalancer-address-type: "intranet"
   enabled: true

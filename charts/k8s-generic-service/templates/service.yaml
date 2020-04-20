@@ -12,7 +12,7 @@ metadata:
   labels:
     app: {{ .Values.appName }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     {{- range .Values.service.ports }}
     - port: {{ .port }}
