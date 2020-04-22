@@ -10,4 +10,4 @@ maintainers:
 - email: harry@konghq.com
   name: hbagdi
 name: kong
-version: 1.2.0
+version: 1.2.1
