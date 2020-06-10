@@ -62,7 +62,8 @@ spec:
               image: "{{ .repository }}:{{ .tag }}"
               command: {{ .command }}
               imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-              args: {{ .args }}
+              args:
+{{ toYaml .args | indent 16 }}
               env:
               {{- range $root.Values.envVars }}
                 - name: "{{ .Name }}"
