@@ -39,6 +39,3 @@ tolerations: []
 affinity: {}
 #
 # imagePullSecrets: []
-
-crd:
-  install: false
