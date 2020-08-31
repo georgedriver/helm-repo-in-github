@@ -1,0 +1,39 @@
+appName: vmware-exporter
+releaseVersion: not-specified
+
+geEnv: "staging"
+deploySHA: "xxxxxxx"
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  path: "/metrics"
+
+alerts:
+  enableDefaultAlerts: true
+  defaultAlerts:
+  - name: noScrapeTargets
+    expr: up{job="<JOBNAME>", namespace="<NAMESPACE>"} == 0
+    summary: No scrape endpoints found for Job
+    description: No scrape endpoint found for job <NAMESPACE>/<JOBNAME>
+    timeToFire: 5m
+    severity: warning
+    runbook_url: ""
+  - name: noScrapeTargets
+    expr: up{job="<JOBNAME>", namespace="<NAMESPACE>"} == 0
+    summary: No scrape endpoints found for Job
+    description: No scrape endpoint found for job <NAMESPACE>/<JOBNAME>
+    timeToFire: 20m
+    severity: critical
+    runbook_url: ""
+  extraAlerts: []
+  # - name: TestAlert
+  #   summary: This is a test alert that will always fire
+  #   description: This alert is genertated for TEST reasons - it will always fire as  job is always eq or higer then 0 (currently {{ $value }})
+  #   expr: count(up{namespace="<NAMESPACE>",appName="<APPNAME>",release="<RELEASENAME>"}) >= 0
+  #   timeToFire: 5m
+  #   severity: warning
+  #   runbook_url: ""
+  #   labels:
+  #     team: "observability"
