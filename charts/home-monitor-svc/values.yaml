@@ -9,6 +9,7 @@ fullnameOverride: ""
 
 service:
   path: "/metrics"
+  port: http
 
 alerts:
   enableDefaultAlerts: true

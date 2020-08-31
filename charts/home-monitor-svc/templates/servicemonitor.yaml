@@ -11,7 +11,7 @@ spec:
   - honorLabels: true
     interval: 30s
     path: {{ .Values.service.path }}
-    port: metrics
+    port: {{ .Values.service.port }}
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}
