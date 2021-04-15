@@ -1,0 +1,5 @@
+{{- $root := . -}}
+
+{{- if .Values.BackendConfig -}}
+{{ .Values.BackendConfig }}
+{{- end }}
