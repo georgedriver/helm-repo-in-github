@@ -1,5 +1,5 @@
 {{- $root := . -}}
 
-{{- if .Values.backendConfig -}}
-{{- toYaml .Values.backendConfig }}
+{{- if .Values.gcpBackendConfig -}}
+{{- toYaml .Values.gcpBackendConfig }}
 {{- end }}

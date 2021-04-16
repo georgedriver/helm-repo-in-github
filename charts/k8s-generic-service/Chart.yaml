@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "1.0"
 description: Generic service chart
 name: k8s-generic-service
-version: 0.5.42
+version: 0.5.43

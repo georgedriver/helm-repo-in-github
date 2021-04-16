@@ -1,0 +1,5 @@
+{{- $root := . -}}
+
+{{- if .Values.gcpIngress -}}
+{{- toYaml .Values.gcpIngress }}
+{{- end }}

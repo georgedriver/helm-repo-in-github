@@ -1,5 +1,5 @@
 {{- $root := . -}}
 
-{{- if .Values.gcpIngress -}}
-{{- toYaml .Values.gcpIngress }}
+{{- if .Values.gcpManagedCertificate -}}
+{{- toYaml .Values.gcpManagedCertificate }}
 {{- end }}
