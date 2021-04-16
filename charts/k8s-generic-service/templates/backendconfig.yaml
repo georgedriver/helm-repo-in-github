@@ -1,5 +1,0 @@
-{{- $root := . -}}
-
-{{- if .Values.BackendConfig -}}
-{{- toYaml .Values.BackendConfig }}
-{{- end }}
