@@ -1,5 +1,5 @@
 {{- $root := . -}}
-# https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#persistentvolumeclaims
+
 {{- if .Values.gcpPersistentVolumeClaim -}}
 {{- toYaml .Values.gcpPersistentVolumeClaim }}
 {{- end }}
