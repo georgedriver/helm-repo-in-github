@@ -3,7 +3,7 @@ entries:
   alert-operator:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.695642+08:00"
+    created: "2021-06-20T19:54:57.516235+08:00"
     description: A Helm chart for alert-operator
     digest: 23a66bce163507aa43f20446c3c327c67421598c01526b176a97647303e3d43e
     name: alert-operator
@@ -15,7 +15,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.695174+08:00"
+    created: "2021-06-20T19:54:57.515773+08:00"
     description: A Helm chart for alert-operator
     digest: 8310f52a5c9216abb4ce2152e529b42f8c4d68ad4c8ae93c01dd2a0ab23a8cc3
     name: alert-operator
@@ -27,7 +27,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.694703+08:00"
+    created: "2021-06-20T19:54:57.515341+08:00"
     description: A Helm chart for alert-operator
     digest: 62f7f53f652ef937e39398c1e988cb0c72a3c791cd76ab17a0738e361b557f8a
     name: alert-operator
@@ -39,7 +39,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.694291+08:00"
+    created: "2021-06-20T19:54:57.514896+08:00"
     description: A Helm chart for alert-operator
     digest: 29daa114e4a137788b52571a3a5a02830cd8ac333ce5693f3eec452764d100ef
     name: alert-operator
@@ -51,7 +51,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.693874+08:00"
+    created: "2021-06-20T19:54:57.514385+08:00"
     description: A Helm chart for alert-operator
     digest: fa67d98f497648e4132b7cbd088654779230be56f5290bab881d3f307d33caad
     name: alert-operator
@@ -64,7 +64,7 @@ entries:
   alertmanager-dingtalk-hook:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.695891+08:00"
+    created: "2021-06-20T19:54:57.516499+08:00"
     description: A Helm chart for alertmanager-dingtalk-hook
     digest: 98b6fab0198febad66618cc647cb64445d634944fea6adf77e932dab543cf85d
     name: alertmanager-dingtalk-hook
@@ -74,7 +74,7 @@ entries:
   clash-client:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.696202+08:00"
+    created: "2021-06-20T19:54:57.516838+08:00"
     description: A Helm chart for Kubernetes
     digest: 12e83944d2f026886f53491adaf7df93de62461cb08ec6909c7c6e932fdc6a7e
     name: clash-client
@@ -84,7 +84,7 @@ entries:
   home-monitor:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.697041+08:00"
+    created: "2021-06-20T19:54:57.517707+08:00"
     description: A Helm chart for Kubernetes
     digest: e0b78fe7f95b850fcf13ac1390b5f1f77263f2713cc26651bd07fe22609736e1
     name: home-monitor
@@ -93,7 +93,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.696615+08:00"
+    created: "2021-06-20T19:54:57.517273+08:00"
     description: A Helm chart for Kubernetes
     digest: e647f29e0ad0773d683724636f02004c60636b7c9c3c71d653e3fd0f855c0ff9
     name: home-monitor
@@ -103,7 +103,7 @@ entries:
   home-monitor-svc:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.697801+08:00"
+    created: "2021-06-20T19:54:57.518526+08:00"
     description: A Helm chart for Kubernetes
     digest: ca6ed120527df68625e75be24c006ee281398b0e8f60573a2a803d756f2f9757
     name: home-monitor-svc
@@ -112,7 +112,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.697405+08:00"
+    created: "2021-06-20T19:54:57.518111+08:00"
     description: A Helm chart for Kubernetes
     digest: 17df275f35e91aa08935e9bf7b76f27d4294da032f8348a621b85745b593de28
     name: home-monitor-svc
@@ -122,7 +122,7 @@ entries:
   k8s-alert-receiver:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.698087+08:00"
+    created: "2021-06-20T19:54:57.518845+08:00"
     description: A Helm chart for K8s AlertManagerReceiver CR
     digest: fd448d2b591dbee37996338a66c8ef20594c9b9cae7be9adef568e3f3dd685dc
     name: k8s-alert-receiver
@@ -132,7 +132,7 @@ entries:
   k8s-alert-router:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.698385+08:00"
+    created: "2021-06-20T19:54:57.519148+08:00"
     description: A Helm chart the k8s-alert-router
     digest: 5b874c1969b53161303ae96d6766bfab0b869dd9ec0b125287c0d5ece9f183ca
     name: k8s-alert-router
@@ -142,7 +142,7 @@ entries:
   k8s-generic-cronjob:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.700167+08:00"
+    created: "2021-06-20T19:54:57.521032+08:00"
     description: Generic cronjob chart
     digest: c130d106206158131f149c4eee6a2857a5eedb0dc76d1610fd3b35efb6c60652
     name: k8s-generic-cronjob
@@ -151,7 +151,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.699757+08:00"
+    created: "2021-06-20T19:54:57.520626+08:00"
     description: Generic cronjob chart
     digest: cf147e6233a75383ed355690ea76b8231de8236d0c02bba4d8c92f02d808655a
     name: k8s-generic-cronjob
@@ -160,7 +160,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.699327+08:00"
+    created: "2021-06-20T19:54:57.520169+08:00"
     description: Generic cronjob chart
     digest: 1234e46dc7205dd4ced6ef44d45d89e004257fbec8fa571ae5fea9f6a5cf58da
     name: k8s-generic-cronjob
@@ -169,7 +169,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.699022+08:00"
+    created: "2021-06-20T19:54:57.519842+08:00"
     description: Generic cronjob chart
     digest: 34f5523e62ce99c8813de5dbe132e2099c4e59c028be2465099b6fb1d21793f1
     name: k8s-generic-cronjob
@@ -178,7 +178,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.698704+08:00"
+    created: "2021-06-20T19:54:57.519508+08:00"
     description: Generic cronjob chart
     digest: d49c4980c8b5f2813f38d4fae331f25ea1b93e2fe4c7df4c878e383bb898285f
     name: k8s-generic-cronjob
@@ -188,7 +188,7 @@ entries:
   k8s-generic-job:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.70097+08:00"
+    created: "2021-06-20T19:54:57.521305+08:00"
     description: Generic job chart
     digest: 878049027842eef1e631fa2eabef325030080cc6775ee8ae8bb4d64a4aa44df9
     name: k8s-generic-job
@@ -198,7 +198,7 @@ entries:
   k8s-generic-service:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.717735+08:00"
+    created: "2021-06-20T19:54:57.539312+08:00"
     description: Generic service chart
     digest: 0227cf30261056e6d89e61faf546c7754d90c0f64173b22324659eeb4d51f211
     name: k8s-generic-service
@@ -207,7 +207,7 @@ entries:
     version: 0.5.43
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.716449+08:00"
+    created: "2021-06-20T19:54:57.538036+08:00"
     description: Generic service chart
     digest: a9d67b19b03753623adc6ca550fc5efa211614841f7900d9f72bb8d65f81b523
     name: k8s-generic-service
@@ -216,7 +216,7 @@ entries:
     version: 0.5.42
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.715136+08:00"
+    created: "2021-06-20T19:54:57.536755+08:00"
     description: Generic service chart
     digest: 9d4e5eab44dc5cb97692da1ef9401005fb0f5ddcfd648bc115a55a9846809e69
     name: k8s-generic-service
@@ -225,7 +225,7 @@ entries:
     version: 0.5.41
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.713511+08:00"
+    created: "2021-06-20T19:54:57.53523+08:00"
     description: Generic service chart
     digest: 89d7acd22d6bcf5d3cfbcfe8216c2bd157269fbdc8e6131a3d4be0b4c1fca0c6
     name: k8s-generic-service
@@ -234,7 +234,7 @@ entries:
     version: 0.5.40
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.711799+08:00"
+    created: "2021-06-20T19:54:57.533369+08:00"
     description: Generic service chart
     digest: d0fe73e8f1c06bd7a1f660a8b8bb885c130451b53c6a006263ae388e49b146ce
     name: k8s-generic-service
@@ -243,7 +243,7 @@ entries:
     version: 0.5.39
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.710532+08:00"
+    created: "2021-06-20T19:54:57.532065+08:00"
     description: Generic service chart
     digest: 8f07f635d5fe6c4ea35e3f45d5103f3c8564c3fc6622509d2517d072d31371db
     name: k8s-generic-service
@@ -252,7 +252,7 @@ entries:
     version: 0.5.38
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.709267+08:00"
+    created: "2021-06-20T19:54:57.530354+08:00"
     description: Generic service chart
     digest: 71ece1f27f48b86c701030934bb6ba77467d27ad27e5c4bb5e2dd7831261b4d9
     name: k8s-generic-service
@@ -261,7 +261,7 @@ entries:
     version: 0.5.37
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.708003+08:00"
+    created: "2021-06-20T19:54:57.528805+08:00"
     description: Generic service chart
     digest: 0b859cdd25933008fc8c9e390880cb1fed8bb0ef20c1f98baf3b01f7357eb0a6
     name: k8s-generic-service
@@ -270,7 +270,7 @@ entries:
     version: 0.5.36
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.706769+08:00"
+    created: "2021-06-20T19:54:57.5274+08:00"
     description: Generic service chart
     digest: 9ab15d9181c8b35b34b3cb34fddb959cc7fca52777c58e679794c4e4e5e42eca
     name: k8s-generic-service
@@ -279,7 +279,7 @@ entries:
     version: 0.5.35
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.705482+08:00"
+    created: "2021-06-20T19:54:57.52611+08:00"
     description: Generic service chart
     digest: 520f7bcc67822b35ac9f8bbc212c70e6df3bc3713d22cfc1156536069c1f6a73
     name: k8s-generic-service
@@ -288,7 +288,7 @@ entries:
     version: 0.5.34
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.704196+08:00"
+    created: "2021-06-20T19:54:57.524784+08:00"
     description: Generic service chart
     digest: b9659f37589412f2835ea27db9e2c39920d138b1e2a67dda2056f46de6b8e702
     name: k8s-generic-service
@@ -297,7 +297,7 @@ entries:
     version: 0.5.33
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.702831+08:00"
+    created: "2021-06-20T19:54:57.523401+08:00"
     description: Generic service chart
     digest: 4a447e5dede478dc83f0c4d879357d28ca4966b9868304f21340c747e8172001
     name: k8s-generic-service
@@ -307,7 +307,7 @@ entries:
   k8s-grafana:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.720403+08:00"
+    created: "2021-06-20T19:54:57.542048+08:00"
     dependencies:
     - alias: grafana
       name: grafana
@@ -329,7 +329,7 @@ entries:
   k8s-nginx-ingress:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.723646+08:00"
+    created: "2021-06-20T19:54:57.545356+08:00"
     dependencies:
     - name: nginx-ingress
       repository: https://kubernetes-charts.storage.googleapis.com
@@ -347,7 +347,7 @@ entries:
   k8s-prometheus-operator:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.784918+08:00"
+    created: "2021-06-20T19:54:57.607579+08:00"
     dependencies:
     - name: prometheus-operator
       repository: https://kubernetes-charts.storage.googleapis.com
@@ -366,7 +366,7 @@ entries:
     version: 1.0.4
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.769961+08:00"
+    created: "2021-06-20T19:54:57.592368+08:00"
     dependencies:
     - name: prometheus-operator
       repository: https://kubernetes-charts.storage.googleapis.com
@@ -385,7 +385,7 @@ entries:
     version: 1.0.3
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.75536+08:00"
+    created: "2021-06-20T19:54:57.577854+08:00"
     dependencies:
     - name: prometheus-operator
       repository: https://kubernetes-charts.storage.googleapis.com
@@ -404,7 +404,7 @@ entries:
     version: 1.0.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.739417+08:00"
+    created: "2021-06-20T19:54:57.561946+08:00"
     dependencies:
     - name: prometheus-operator
       repository: https://kubernetes-charts.storage.googleapis.com
@@ -424,7 +424,7 @@ entries:
   k8s-thanos:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.798152+08:00"
+    created: "2021-06-20T19:54:57.622003+08:00"
     dependencies:
     - name: thanos
       repository: file://../thanos
@@ -443,7 +443,7 @@ entries:
     version: 0.2.15
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.795439+08:00"
+    created: "2021-06-20T19:54:57.618892+08:00"
     dependencies:
     - name: thanos
       repository: file://../thanos
@@ -462,7 +462,7 @@ entries:
     version: 0.2.14
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.792817+08:00"
+    created: "2021-06-20T19:54:57.616188+08:00"
     dependencies:
     - name: thanos
       repository: file://../thanos
@@ -481,7 +481,7 @@ entries:
     version: 0.2.13
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.79025+08:00"
+    created: "2021-06-20T19:54:57.6132+08:00"
     dependencies:
     - alias: thanos
       name: thanos
@@ -501,7 +501,7 @@ entries:
     version: 0.2.12
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.787618+08:00"
+    created: "2021-06-20T19:54:57.610317+08:00"
     dependencies:
     - alias: thanos
       name: thanos
@@ -521,7 +521,7 @@ entries:
     version: 0.2.11
   k8s-user-namespaces:
   - apiVersion: v1
-    created: "2021-06-20T19:44:48.798863+08:00"
+    created: "2021-06-20T19:54:57.622706+08:00"
     description: Helm chart for maintaining user namespaces
     digest: 4ff29e41228e578bb8bde01c49a99c16f0233be0f3c587f8eb2bff6da707cc86
     keywords:
@@ -534,7 +534,7 @@ entries:
   kong:
   - apiVersion: v1
     appVersion: "1.4"
-    created: "2021-06-20T19:44:48.80646+08:00"
+    created: "2021-06-20T19:54:57.630099+08:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -555,7 +555,7 @@ entries:
     version: 1.2.1
   - apiVersion: v1
     appVersion: "1.4"
-    created: "2021-06-20T19:44:48.802735+08:00"
+    created: "2021-06-20T19:54:57.626481+08:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -577,7 +577,16 @@ entries:
   prometheus-alerts:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.807117+08:00"
+    created: "2021-06-20T19:54:57.631272+08:00"
+    description: A Helm chart for Kubernetes
+    digest: ec24d9474a58bd64060f04e4300244b12dbb4add23d659fdf098f955c8ed9676
+    name: prometheus-alerts
+    urls:
+    - prometheus-alerts-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-06-20T19:54:57.630843+08:00"
     description: A Helm chart for Kubernetes
     digest: 7c65b7364434deaff838051caf215fd56b320dc6d559529657dd2d7b6c442f78
     name: prometheus-alerts
@@ -586,7 +595,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.806794+08:00"
+    created: "2021-06-20T19:54:57.63045+08:00"
     description: A Helm chart for Kubernetes
     digest: aa8df6fed0a3d0efd17a10d0a8718604a0f7d2643a4fe6a746c9980b355fe819
     name: prometheus-alerts
@@ -596,7 +605,7 @@ entries:
   vault-agent:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.807755+08:00"
+    created: "2021-06-20T19:54:57.632223+08:00"
     description: A Helm chart for Vault agent
     digest: 592af12ad93a07537886f2f791fc4c235881616748573988804f6fd664ef8f0e
     name: vault-agent
@@ -605,7 +614,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.80754+08:00"
+    created: "2021-06-20T19:54:57.631967+08:00"
     description: A Helm chart for Vault agent
     digest: 77a217bcaabe32c7740cbcbd17daacd4d321e4d07cd506978a7dad371249c225
     name: vault-agent
@@ -614,11 +623,11 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2021-06-20T19:44:48.807331+08:00"
+    created: "2021-06-20T19:54:57.631651+08:00"
     description: A Helm chart for Vault agent
     digest: e686cc9a928da1b7575153614700be5584448ccfd61d624a31e3e77dfbb82608
     name: vault-agent
     urls:
     - vault-agent-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-20T19:44:48.693305+08:00"
+generated: "2021-06-20T19:54:57.513583+08:00"
