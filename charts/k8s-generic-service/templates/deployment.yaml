@@ -64,6 +64,11 @@ spec:
 {{ toYaml .emptyDir | indent 12 }}
           {{- end }}
 
+          {{- if .persistentVolumeClaim }}
+          persistentVolumeClaim:
+{{ toYaml .persistentVolumeClaim | indent 12 }}
+          {{- end }}
+
         {{- end }}
 
       containers:

@@ -221,6 +221,11 @@ volumes: []
   #     medium: Memory
   #   mountPath: /boop
 
+  # - name: moop
+  #   persistentVolumeClaim:
+  #     claimName: task-pv-claim
+  #   mountPath: /moop
+
 runJob:
   enabled: false
   name: MigrateJob
