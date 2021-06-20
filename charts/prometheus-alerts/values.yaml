@@ -1,4 +1,11 @@
 appName: test
+releaseVersion: not-specified
+
+geEnv: "staging"
+deploySHA: "xxxxxxx"
+
+nameOverride: ""
+fullnameOverride: ""
 
 alerts:
   enableDefaultAlerts: true
