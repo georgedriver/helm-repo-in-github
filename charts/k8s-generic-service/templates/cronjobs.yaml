@@ -56,6 +56,17 @@ spec:
             - name: {{ .name }}
               image: "{{ .repository }}:{{ .tag }}"
               command: {{ .command }}
+              volumeMounts:
+                {{- range .Values.volumes }}
+                - name: {{ .name }}
+                  mountPath: {{ .mountPath }}
+                  {{- if .readOnly }}
+                  readOnly: {{ .readOnly }}
+                  {{-  end }}
+                  {{- if .subPath }}
+                  subPath: {{ .subPath }}
+                  {{-  end }}
+                {{- end }}
               imagePullPolicy: {{ $root.Values.image.pullPolicy }}
               args: {{ .args }}
               env:
