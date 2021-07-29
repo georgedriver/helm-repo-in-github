@@ -43,12 +43,17 @@ spec:
 
               {{- if .configMap }}
               configMap:
-{{ toYaml .configMap | indent 16 }}
+    {{ toYaml .configMap | indent 12 }}
               {{- end }}
 
               {{- if .emptyDir }}
               emptyDir:
-{{ toYaml .emptyDir | indent 16 }}
+    {{ toYaml .emptyDir | indent 12 }}
+              {{- end }}
+
+              {{- if .persistentVolumeClaim }}
+              persistentVolumeClaim:
+    {{ toYaml .persistentVolumeClaim | indent 12 }}
               {{- end }}
 
             {{- end }}
