@@ -16,6 +16,7 @@ spec:
   schedule: "{{ .schedule }}"
   successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit | default 3 }}
   failedJobsHistoryLimit: {{ .failedJobsHistoryLimit | default 3 }}
+  concurrencyPolicy: {{ .concurrencyPolicy | default "Allow" }}
   jobTemplate:
     spec:
       {{- if .activeDeadlineSeconds }}
