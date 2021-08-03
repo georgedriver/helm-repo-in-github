@@ -27,10 +27,10 @@ spec:
           labels:
             app: {{ $root.Values.appName }}-job
           annotations:
-            # {{- if $root.Values.vault.enabled }}
-            # vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
-            # vault.security.banzaicloud.io/vault-skip-verify: "true"
-            # {{- end }}
+            {{- if $root.Values.vault.enabled }}
+            vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+            vault.security.banzaicloud.io/vault-skip-verify: "true"
+            {{- end }}
             sidecar.istio.io/inject: "false" # Jobs cannot use istio proxy because it does not run to completion
 
         spec:
