@@ -27,10 +27,10 @@ spec:
           labels:
             app: {{ $root.Values.appName }}-job
           annotations:
-            {{- if $root.Values.vault.enabled }}
-            vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
-            vault.security.banzaicloud.io/vault-skip-verify: "true"
-            {{- end }}
+            # {{- if $root.Values.vault.enabled }}
+            # vault.security.banzaicloud.io/vault-addr: "https://vault.default:8200"
+            # vault.security.banzaicloud.io/vault-skip-verify: "true"
+            # {{- end }}
             sidecar.istio.io/inject: "false" # Jobs cannot use istio proxy because it does not run to completion
 
         spec:
@@ -60,7 +60,8 @@ spec:
           containers:
             - name: {{ .name }}
               image: "{{ .repository }}:{{ .tag }}"
-              command: {{ .command }}
+              command:
+{{ toYaml .command | indent 16 }}
               volumeMounts:
                 {{- range $root.Values.volumes }}
                 - name: {{ .name }}
@@ -73,7 +74,8 @@ spec:
                   {{-  end }}
                 {{- end }}
               imagePullPolicy: {{ $root.Values.image.pullPolicy }}
-              args: {{ .args }}
+              args:
+{{ toYaml .args | indent 16 }}
               env:
                 - name: WE_ENV
                   value: {{ $root.Values.geEnv }}
