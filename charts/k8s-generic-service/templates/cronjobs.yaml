@@ -19,6 +19,7 @@ spec:
   concurrencyPolicy: {{ .concurrencyPolicy | default "Allow" }}
   jobTemplate:
     spec:
+      backoffLimit: {{ .backoffLimit | default 0 }}
       {{- if .activeDeadlineSeconds }}
       activeDeadlineSeconds:
 {{ toYaml .activeDeadlineSeconds | indent 8 }}

@@ -190,6 +190,7 @@ cronjobs: []
   #   successfulJobsHistoryLimit: 3
   #   failedJobsHistoryLimit: 3
   #   concurrencyPolicy: Allow
+  #   backoffLimit: 0
   #   command: ["echo"]
   #   args: ["Hello world"]
   #   repository: quay.io/georgedriver/k8s-sample-app
@@ -200,6 +201,7 @@ cronjobs: []
   #   successfulJobsHistoryLimit: 3
   #   failedJobsHistoryLimit: 3
   #   concurrencyPolicy: Forbid
+  #   backoffLimit: 6
   #   command: ["echo"]
   #   args: ["Bye", "world"]
   #   repository: quay.io/georgedriver/k8s-sample-app
