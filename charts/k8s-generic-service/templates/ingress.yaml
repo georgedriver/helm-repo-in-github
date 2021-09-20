@@ -1,6 +1,6 @@
 {{- $root := . -}}
 
-{{- if (.Values.ingress.enabled) and (not .Values.ingress.istio) -}}
+{{- if and (.Values.ingress.enabled) (not .Values.ingress.istio) -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
