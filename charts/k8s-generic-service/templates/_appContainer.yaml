@@ -46,16 +46,16 @@
       protocol: {{ .protocol }}
     {{- end }}
 
-  {{- if (.Values.healthProbe.http.enabled) and (not .Values.healthProbe.tcp.enabled) and (not .Values.healthProbe.exec.enabled) }}
+  {{- if and (.Values.healthProbe.http.enabled) (not .Values.healthProbe.tcp.enabled) (not .Values.healthProbe.exec.enabled) }}
     {{ include "k8s-generic-service.Helper.HTTPLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
   {{- end}}
 
 
-  {{- if (.Values.healthProbe.tcp.enabled) and (not .Values.healthProbe.http.enabled) and (not .Values.healthProbe.exec.enabled) }}
+  {{- if and (.Values.healthProbe.tcp.enabled) (not .Values.healthProbe.http.enabled) (not .Values.healthProbe.exec.enabled) }}
     {{ include "k8s-generic-service.Helper.TCPLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
   {{- end }}
 
-  {{- if (.Values.healthProbe.exec.enabled) and (not .Values.healthProbe.http.enabled) and (not .Values.healthProbe.tcp.enabled) }}
+  {{- if and (.Values.healthProbe.exec.enabled) (not .Values.healthProbe.http.enabled) (not .Values.healthProbe.tcp.enabled) }}
     {{ include "k8s-generic-service.Helper.ExecLivenessReadinessProbes" .Values.healthProbe | indent 2 }}
   {{- end }}
 
