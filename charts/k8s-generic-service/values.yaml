@@ -296,4 +296,9 @@ autorunRestart:
 #   - "foo.remote"
 #   - "bar.remote"
 
-privileged: false
+# https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+# securityContext:
+#   privileged: true
+#   capabilities:
+#     add:
+#       - SYS_ADMIN
