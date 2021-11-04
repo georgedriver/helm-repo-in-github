@@ -2,9 +2,9 @@
 - name: {{ .Values.appName }}
   image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- if .Values.securityContext -}}
+{{- if .Values.securityContext }}
   securityContext:
-{{- toYaml .Values.securityContext | indent 4 }}
+{{ toYaml .Values.securityContext | indent 4 }}
 {{- end }}
   volumeMounts:
     {{- range .Values.volumes }}
