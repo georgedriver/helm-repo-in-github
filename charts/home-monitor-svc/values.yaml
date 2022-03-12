@@ -10,6 +10,7 @@ fullnameOverride: ""
 service:
   path: "/metrics"
   port: http
+  interval: 30s
 
 alerts:
   enableDefaultAlerts: true
