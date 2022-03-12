@@ -9,6 +9,7 @@ spec:
   jobLabel: {{ .Values.appName }}
   endpoints:
   - honorLabels: true
+    scrapeTimeout: {{ .Values.service.scrapeTimeout }}
     interval: {{ .Values.service.interval }}
     path: {{ .Values.service.path }}
     port: {{ .Values.service.port }}
