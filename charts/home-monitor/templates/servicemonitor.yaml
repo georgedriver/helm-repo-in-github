@@ -9,7 +9,7 @@ spec:
   jobLabel: {{ .Values.appName }}
   endpoints:
   - honorLabels: true
-    interval: 30s
+    interval: {{ .Values.service.interval }}
     path: {{ .Values.service.path }}
     port: metrics
   namespaceSelector:

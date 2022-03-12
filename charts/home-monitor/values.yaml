@@ -12,6 +12,7 @@ service:
   endpointIP: 111.222.222.111
   port: 9354
   path: "/"
+  interval: 30s
 
 alerts:
   enableDefaultAlerts: true
