@@ -1,0 +1,71 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: microk8s-kube-proxy
+  namespace: system-monitoring
+  labels:
+    app.kubernetes.io/name: microk8s-kube-proxy
+    k8s-monitoring: "true"
+spec:
+  jobLabel: kube-proxy
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: http-metrics
+    scheme: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-proxy
+  namespaceSelector:
+    matchNames:
+    - kube-system
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: microk8s-kube-controller-manager
+  namespace: system-monitoring
+  labels:
+    app.kubernetes.io/name: microk8s-kube-controller-manager
+    k8s-monitoring: "true"
+spec:
+  jobLabel: kube-controller-manager
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-controller-manager
+  namespaceSelector:
+    matchNames:
+    - kube-system
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: microk8s-kube-scheduler
+  namespace: system-monitoring
+  labels:
+    app.kubernetes.io/name: microk8s-kube-scheduler
+    k8s-monitoring: "true"
+spec:
+  jobLabel: kube-scheduler
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-scheduler
+  namespaceSelector:
+    matchNames:
+    - kube-system

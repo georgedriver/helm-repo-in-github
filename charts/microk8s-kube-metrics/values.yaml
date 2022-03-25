@@ -1,0 +1,1 @@
+masterIP: 192.168.1.22 # The master node IP address which controller-manager, scheduler and kube-proxy are running on
